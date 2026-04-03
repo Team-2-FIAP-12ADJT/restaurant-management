@@ -1,0 +1,36 @@
+services:
+  db:
+    image: postgres:18-alpine
+    container_name: postgres-db
+    restart: always
+    environment:
+      POSTGRES_DB: ${SPRING_DATASOURCE_DATABASE}
+      POSTGRES_USER: ${SPRING_DATASOURCE_USERNAME}
+      POSTGRES_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}
+    ports:
+      - "${SPRING_DATASOURCE_PORT}:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      # Se você criar a pasta /config/init-db, pode descomentar a linha abaixo
+      # - ./config/init-db:/docker-entrypoint-initdb.d
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile.prod
+    container_name: restaurant_management_app
+    depends_on:
+      - db
+    ports:
+      - "${APP_PORT}:${APP_PORT}"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/${SPRING_DATASOURCE_DATABASE}
+      SPRING_DATASOURCE_USERNAME: ${SPRING_DATASOURCE_USERNAME}
+      SPRING_DATASOURCE_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}
+      SPRING_JPA_HIBERNATE_DDL_AUTO: validate
+      SPRING_DATASOURCE_PORT: ${SPRING_DATASOURCE_PORT}
+      SPRING_DATASOURCE_DATABASE: ${SPRING_DATASOURCE_DATABASE}
+      APP_PORT: ${APP_PORT}
+
+volumes:
+  postgres-data:
