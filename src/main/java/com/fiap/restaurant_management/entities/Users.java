@@ -16,6 +16,7 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 import java.util.List;
 
+import jakarta.transaction.Transactional;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 

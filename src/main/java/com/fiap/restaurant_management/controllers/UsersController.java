@@ -1,5 +1,6 @@
 package com.fiap.restaurant_management.controllers;
 
+import com.fiap.restaurant_management.dtos.UsersUpdateRequestDTO;
 import com.fiap.restaurant_management.services.UsersService;
 
 import org.springframework.http.HttpStatus;
@@ -11,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import com.fiap.restaurant_management.dtos.UsersResponseDTO;
 
 import java.util.Objects;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/users")
@@ -26,6 +28,16 @@ public class UsersController {
     @PostMapping
     public ResponseEntity<UsersResponseDTO> create(@Valid @RequestBody UsersRequestDTO usersRequestDTO) {
         return ResponseEntity.status(HttpStatus.CREATED).body(this.usersService.create(usersRequestDTO));
+    }
+
+    @PutMapping
+    public ResponseEntity<UsersResponseDTO> update(@Valid @RequestBody UsersUpdateRequestDTO usersRequestDTO) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(this.usersService.update(usersRequestDTO));
+    }
+
+    @GetMapping("/{userId}")
+    public ResponseEntity<UsersResponseDTO> findById(@PathVariable UUID userId) {
+        return ResponseEntity.status(HttpStatus.OK).body(this.usersService.findById(userId));
     }
 
 }
