@@ -1,0 +1,27 @@
+package com.fiap.restaurant_management.dtos;
+
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.Valid;
+
+import com.fiap.restaurant_management.enums.RoleEnum;
+
+public record UsersRequestDTO(
+                @NotBlank(message = "Password is required") @Size(min = 8, max = 16, message = "Password must be between 8 and 16 characters") @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]+$", message = "Password must contain upper, lower, number and special character") String password,
+                @NotBlank(message = "Name is required") String name,
+                @NotBlank(message = "Login is required") String login,
+                @NotBlank(message = "Email is required") @Email(message = "Email should be valid") String email,
+                @NotNull(message = "Role is required") RoleEnum role,
+
+                @Valid @NotNull(message = "Address details are required") AddressRequestDTO address) {
+
+        public UsersRequestDTO {
+                name = name != null ? name.trim() : null;
+                login = login != null ? login.trim() : null;
+                email = email != null ? email.trim() : null;
+                password = password != null ? password.trim() : null;
+        }
+}
