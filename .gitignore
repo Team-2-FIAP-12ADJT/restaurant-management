@@ -34,3 +34,7 @@ build/
 
 ### Environment ###
 .env
+
+### Liquibase ###
+# Credenciais locais de banco (nunca versionar)
+src/main/resources/liquibase.properties
