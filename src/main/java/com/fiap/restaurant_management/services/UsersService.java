@@ -1,17 +1,18 @@
 package com.fiap.restaurant_management.services;
 
-import com.fiap.restaurant_management.entities.Users;
-import com.fiap.restaurant_management.repositories.UsersRepository;
+import com.fiap.restaurant_management.dtos.UsersRequestDTO;
 import com.fiap.restaurant_management.dtos.UsersResponseDTO;
-
+import com.fiap.restaurant_management.entities.Users;
+import com.fiap.restaurant_management.mappers.UsersMapper;
+import com.fiap.restaurant_management.repositories.UsersRepository;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import lombok.extern.slf4j.Slf4j;
-import com.fiap.restaurant_management.dtos.UsersRequestDTO;
-import com.fiap.restaurant_management.mappers.UsersMapper;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.List;
 import java.util.Objects;
 
 @Service
@@ -40,5 +41,15 @@ public class UsersService {
         Users user = this.usersRepository.save(Objects.requireNonNull(usersMapped, "Mapped user cannot be null"));
         log.info("User created with id: {}", user.getId());
         return this.usersMapper.toResponseDTO(user);
+    }
+
+    @Transactional(readOnly = true)
+    public List<UsersResponseDTO> findAll(Pageable pageable) {
+        log.info("Listing users - page: {}, size: {}", pageable.getPageNumber(), pageable.getPageSize());
+
+        return this.usersRepository.findAll(pageable)
+                .stream()
+                .map(this.usersMapper::toResponseDTO)
+                .toList();
     }
 }
