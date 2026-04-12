@@ -85,4 +85,13 @@ public class Users {
             }
         }
     }
+
+    public boolean isEmailChanging(String email) {
+        return !this.email.equalsIgnoreCase(email);
+    }
+
+    public boolean isLoginChanging(String login) {
+        return !this.login.equalsIgnoreCase(login);
+    }
+
 }
