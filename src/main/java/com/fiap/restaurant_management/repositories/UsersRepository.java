@@ -1,7 +1,6 @@
 package com.fiap.restaurant_management.repositories;
 
 import com.fiap.restaurant_management.entities.Users;
-import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -15,6 +14,5 @@ public interface UsersRepository extends JpaRepository<Users, UUID> {
 
 	boolean existsByEmailIgnoreCase(String email);
 
-	@EntityGraph(attributePaths = "addresses")
-    Optional<Users> findById(UUID id);
+	Optional<Users> findByIdAndDeletedAtIsNull(UUID id);
 }

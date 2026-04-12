@@ -16,7 +16,6 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 import java.util.List;
 
-import jakarta.transaction.Transactional;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -86,4 +85,13 @@ public class Users {
             }
         }
     }
+
+    public boolean isEmailChanging(String email) {
+        return !this.email.equalsIgnoreCase(email);
+    }
+
+    public boolean isLoginChanging(String login) {
+        return !this.login.equalsIgnoreCase(login);
+    }
+
 }

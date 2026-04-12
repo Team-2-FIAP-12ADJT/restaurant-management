@@ -30,14 +30,18 @@ public class UsersController {
         return ResponseEntity.status(HttpStatus.CREATED).body(this.usersService.create(usersRequestDTO));
     }
 
-    @PutMapping
-    public ResponseEntity<UsersResponseDTO> update(@Valid @RequestBody UsersUpdateRequestDTO usersRequestDTO) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(this.usersService.update(usersRequestDTO));
+    @PatchMapping("/{userId}")
+    public ResponseEntity<UsersResponseDTO> update(
+            @PathVariable UUID userId,
+            @Valid @RequestBody UsersUpdateRequestDTO updateRequestDTO) {
+        log.info("Updating user with id: {}", userId);
+        return ResponseEntity.ok(this.usersService.update(userId, updateRequestDTO));
     }
 
     @GetMapping("/{userId}")
     public ResponseEntity<UsersResponseDTO> findById(@PathVariable UUID userId) {
-        return ResponseEntity.status(HttpStatus.OK).body(this.usersService.findById(userId));
+        log.info("Finding user with id: {}", userId);
+        return ResponseEntity.ok(this.usersService.findById(userId));
     }
 
 }
