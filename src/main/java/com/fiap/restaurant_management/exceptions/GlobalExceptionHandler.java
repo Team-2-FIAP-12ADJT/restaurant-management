@@ -70,7 +70,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                 "Erro interno no servidor");
 
         problemDetail.setTitle("Erro interno no servidor");
-        problemDetail.setType(URI.create("https://api.locatech.com/errors/internal-server-error"));
+        problemDetail.setType(URI.create("https://api.restaurant-management.com/errors/internal-server-error"));
 
         return problemDetail;
     }
