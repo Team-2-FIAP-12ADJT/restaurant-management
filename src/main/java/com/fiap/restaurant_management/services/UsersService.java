@@ -1,9 +1,12 @@
 package com.fiap.restaurant_management.services;
 
+import com.fiap.restaurant_management.dtos.UsersFilterDTO;
 import com.fiap.restaurant_management.entities.Users;
 import com.fiap.restaurant_management.repositories.UsersRepository;
 import com.fiap.restaurant_management.dtos.UsersResponseDTO;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import lombok.extern.slf4j.Slf4j;
@@ -40,5 +43,17 @@ public class UsersService {
         Users user = this.usersRepository.save(Objects.requireNonNull(usersMapped, "Mapped user cannot be null"));
         log.info("User created with id: {}", user.getId());
         return this.usersMapper.toResponseDTO(user);
+    }
+
+    public Page<UsersResponseDTO> findUsers(UsersFilterDTO filter, Pageable pageable) {
+        String name = filter != null ? filter.name() : null;
+
+        if (name != null && !name.isBlank()) {
+            return this.usersRepository.findByNameContainingIgnoreCase(name, pageable)
+                    .map(this.usersMapper::toResponseDTO);
+        }
+
+        return this.usersRepository.findAll(pageable)
+                .map(this.usersMapper::toResponseDTO);
     }
 }

@@ -1,6 +1,8 @@
 package com.fiap.restaurant_management.repositories;
 
 import com.fiap.restaurant_management.entities.Users;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -12,4 +14,6 @@ public interface UsersRepository extends JpaRepository<Users, UUID> {
 	boolean existsByLoginIgnoreCase(String login);
 
 	boolean existsByEmailIgnoreCase(String email);
+
+	Page<Users> findByNameContainingIgnoreCase(String name, Pageable pageable);
 }
