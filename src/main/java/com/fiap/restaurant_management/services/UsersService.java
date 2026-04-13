@@ -51,11 +51,11 @@ public class UsersService {
         String name = filter != null ? filter.name() : null;
 
         if (name != null && !name.isBlank()) {
-            return this.usersRepository.findByNameContainingIgnoreCase(name, pageable)
+            return this.usersRepository.findByNameContainingIgnoreCaseAndDeletedAtIsNull(name, pageable)
                     .map(this.usersMapper::toResponseDTO);
         }
 
-        return this.usersRepository.findAll(pageable)
+        return this.usersRepository.findByDeletedAtIsNull(pageable)
                 .map(this.usersMapper::toResponseDTO);
     }
 

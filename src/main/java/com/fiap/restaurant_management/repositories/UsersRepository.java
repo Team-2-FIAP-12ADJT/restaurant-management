@@ -16,7 +16,9 @@ public interface UsersRepository extends JpaRepository<Users, UUID> {
 
 	boolean existsByEmailIgnoreCase(String email);
 
-	Page<Users> findByNameContainingIgnoreCase(String name, Pageable pageable);
-
 	Optional<Users> findByIdAndDeletedAtIsNull(UUID id);
+
+	Page<Users> findByNameContainingIgnoreCaseAndDeletedAtIsNull(String name, Pageable pageable);
+
+    Page<Users> findByDeletedAtIsNull(Pageable pageable);
 }
