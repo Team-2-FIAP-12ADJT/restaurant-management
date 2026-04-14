@@ -5,7 +5,8 @@ import com.fiap.restaurant_management.dtos.UsersFilterDTO;
 import com.fiap.restaurant_management.dtos.UsersRequestDTO;
 import com.fiap.restaurant_management.dtos.UsersResponseDTO;
 import com.fiap.restaurant_management.dtos.UsersUpdateRequestDTO;
-import com.fiap.restaurant_management.services.UsersService;
+import com.fiap.restaurant_management.services.interfaces.UsersServiceContract;
+
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -24,9 +25,9 @@ import java.util.UUID;
 @Slf4j
 public class UsersController {
 
-    private final UsersService usersService;
+    private final UsersServiceContract usersService;
 
-    public UsersController(UsersService usersService) {
+    public UsersController(UsersServiceContract usersService) {
         this.usersService = Objects.requireNonNull(usersService);
     }
 
@@ -47,11 +48,11 @@ public class UsersController {
                 usersPage.getNumber() + 1,
                 usersPage.getSize(),
                 usersPage.getTotalElements(),
-                usersPage.getTotalPages()
-        );
+                usersPage.getTotalPages());
 
         return ResponseEntity.ok(response);
     }
+
     @PatchMapping("/{userId}")
     public ResponseEntity<UsersResponseDTO> update(
             @PathVariable UUID userId,

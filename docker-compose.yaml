@@ -19,7 +19,7 @@ services:
       - db
     ports:
       - "${APP_PORT}:${APP_PORT}"
-      - "5005:5005"
+      - "127.0.0.1:5005:5005"
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/${SPRING_DATASOURCE_DATABASE}
       SPRING_DATASOURCE_USERNAME: ${SPRING_DATASOURCE_USERNAME}
@@ -30,10 +30,12 @@ services:
       APP_PORT: ${APP_PORT}
     volumes:
       - .:/app:delegated           # Espelha o código fonte
+      - app_target:/app/target     # Isola classes compiladas do container (evita artefatos inválidos do host/IDE)
       - maven_cache:/root/.m2      # Volume nomeado para persistir dependências Maven
     # Comando que inicia o Spring com DevTools e suporte a Debug
     command: ./mvnw spring-boot:run -Dspring-boot.run.jvmArguments="-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005"
 
 volumes:
   pgdata:
+  app_target:
   maven_cache:

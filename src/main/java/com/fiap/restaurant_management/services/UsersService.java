@@ -4,6 +4,7 @@ import com.fiap.restaurant_management.dtos.*;
 import com.fiap.restaurant_management.entities.Users;
 import com.fiap.restaurant_management.mappers.UsersMapper;
 import com.fiap.restaurant_management.repositories.UsersRepository;
+import com.fiap.restaurant_management.services.interfaces.UsersServiceContract;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,7 +22,7 @@ import java.util.UUID;
 
 @Service
 @Slf4j
-public class UsersService {
+public class UsersService implements UsersServiceContract {
 
     private final UsersRepository usersRepository;
     private final UsersMapper usersMapper;
