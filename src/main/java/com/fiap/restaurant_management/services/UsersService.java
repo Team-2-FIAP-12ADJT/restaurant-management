@@ -86,6 +86,37 @@ public class UsersService implements UsersServiceContract {
         Users user = this.usersRepository.findByIdAndDeletedAtIsNull(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User", userId));
         log.info("User found with id: {}", user.getId());
+
         return this.usersMapper.toResponseDTO(user);
     }
+
+
+    @Transactional
+    public void delete(UUID userId) {
+        Users user = this.usersRepository.findByIdAndDeletedAtIsNull(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("User", userId));
+        log.info("User found with id: {}", user.getId());
+        user.softDelete();
+    }
+
+
+    public void updatePassWord(UUID userId, UsersUpdatePassWordRequestDTO usersUpdatePassWordRequestDTO) {
+        Users user = this.usersRepository.findByIdAndDeletedAtIsNull(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("User", userId));
+
+        if(!user.matchesPassword(usersUpdatePassWordRequestDTO.oldPassWord())){
+            throw new IllegalArgumentException("Old password is incorrect");
+        }
+
+        if(user.passwordEquals(usersUpdatePassWordRequestDTO.newPassWord())){
+            throw new IllegalArgumentException("New password must be different from the old password");
+        }
+        user.setPassword(usersUpdatePassWordRequestDTO.newPassWord());
+        usersRepository.save(user);
+    }
+
+
+
+
+
 }

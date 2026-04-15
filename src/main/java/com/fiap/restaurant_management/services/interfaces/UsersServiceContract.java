@@ -1,9 +1,6 @@
 package com.fiap.restaurant_management.services.interfaces;
 
-import com.fiap.restaurant_management.dtos.UsersFilterDTO;
-import com.fiap.restaurant_management.dtos.UsersRequestDTO;
-import com.fiap.restaurant_management.dtos.UsersResponseDTO;
-import com.fiap.restaurant_management.dtos.UsersUpdateRequestDTO;
+import com.fiap.restaurant_management.dtos.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -18,4 +15,9 @@ public interface UsersServiceContract {
     UsersResponseDTO update(UUID userId, UsersUpdateRequestDTO updateRequestDTO);
 
     UsersResponseDTO findById(UUID userId);
+
+    void delete(UUID userId);
+
+    void updatePassWord(UUID userId, UsersUpdatePassWordRequestDTO usersUpdatePassWordRequestDTO);
+
 }
