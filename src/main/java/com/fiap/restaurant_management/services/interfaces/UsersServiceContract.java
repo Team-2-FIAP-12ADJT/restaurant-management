@@ -18,6 +18,6 @@ public interface UsersServiceContract {
 
     void delete(UUID userId);
 
-    void updatePassWord(UUID userId, UsersUpdatePassWordRequestDTO usersUpdatePassWordRequestDTO);
+    void updatePassword(UUID userId, UsersUpdatePasswordRequestDTO usersUpdatePasswordRequestDTO);
 
 }

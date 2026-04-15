@@ -2,6 +2,7 @@ package com.fiap.restaurant_management.services;
 
 import com.fiap.restaurant_management.dtos.*;
 import com.fiap.restaurant_management.entities.Users;
+import com.fiap.restaurant_management.exceptions.PasswordUpdateException;
 import com.fiap.restaurant_management.mappers.UsersMapper;
 import com.fiap.restaurant_management.repositories.UsersRepository;
 import com.fiap.restaurant_management.services.interfaces.UsersServiceContract;
@@ -91,28 +92,29 @@ public class UsersService implements UsersServiceContract {
     }
 
 
-    @Transactional
+
     public void delete(UUID userId) {
         Users user = this.usersRepository.findByIdAndDeletedAtIsNull(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User", userId));
         log.info("User found with id: {}", user.getId());
         user.softDelete();
+        this.usersRepository.save(Objects.requireNonNull(user, "Mapped user cannot be null"));
     }
 
 
-    public void updatePassWord(UUID userId, UsersUpdatePassWordRequestDTO usersUpdatePassWordRequestDTO) {
+    public void updatePassword(UUID userId, UsersUpdatePasswordRequestDTO usersUpdatePasswordRequestDTO) {
         Users user = this.usersRepository.findByIdAndDeletedAtIsNull(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User", userId));
-
-        if(!user.matchesPassword(usersUpdatePassWordRequestDTO.oldPassWord())){
-            throw new IllegalArgumentException("Old password is incorrect");
+        log.info("User found with id: {}", user.getId());
+        if(!user.matchesPassword(usersUpdatePasswordRequestDTO.oldPassword())){
+            throw new PasswordUpdateException( HttpStatus.BAD_REQUEST, "Old password is incorrect" , userId);
         }
 
-        if(user.passwordEquals(usersUpdatePassWordRequestDTO.newPassWord())){
-            throw new IllegalArgumentException("New password must be different from the old password");
+        if(user.passwordEquals(usersUpdatePasswordRequestDTO.newPassword())){
+            throw new PasswordUpdateException( HttpStatus.CONFLICT, "New password must be different from the old password" , userId);
         }
-        user.setPassword(usersUpdatePassWordRequestDTO.newPassWord());
-        usersRepository.save(user);
+        user.setPassword(usersUpdatePasswordRequestDTO.newPassword());
+        this.usersRepository.save(user);
     }
 
 

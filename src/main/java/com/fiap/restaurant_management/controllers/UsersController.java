@@ -70,12 +70,12 @@ public class UsersController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
-    @PatchMapping("passwordupdate/{userId}")
+    @PatchMapping("/{userId}/password")
     public  ResponseEntity<Void> updatePassWord(
                 @PathVariable UUID userId,
-                @Valid @RequestBody UsersUpdatePassWordRequestDTO usersUpdatePassWordRequestDTO){
+                @Valid @RequestBody UsersUpdatePasswordRequestDTO usersUpdatePasswordRequestDTO){
         log.info("Update Pasword user with id: {}", userId);
-        this.usersService.updatePassWord(userId, usersUpdatePassWordRequestDTO);
+        this.usersService.updatePassword(userId, usersUpdatePasswordRequestDTO);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
