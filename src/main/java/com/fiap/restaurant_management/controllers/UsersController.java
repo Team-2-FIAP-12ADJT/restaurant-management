@@ -6,6 +6,8 @@ import com.fiap.restaurant_management.dtos.UsersRequestDTO;
 import com.fiap.restaurant_management.dtos.UsersResponseDTO;
 import com.fiap.restaurant_management.dtos.UsersUpdateRequestDTO;
 import com.fiap.restaurant_management.services.interfaces.UsersServiceContract;
+import com.fiap.restaurant_management.dtos.UsersLoginRequestDTO;
+import com.fiap.restaurant_management.dtos.UsersLoginResponseDTO;
 
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
@@ -65,6 +67,13 @@ public class UsersController {
     public ResponseEntity<UsersResponseDTO> findById(@PathVariable UUID userId) {
         log.info("Finding user with id: {}", userId);
         return ResponseEntity.ok(this.usersService.findById(userId));
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<UsersLoginResponseDTO> validateLogin(
+            @Valid @RequestBody UsersLoginRequestDTO loginRequestDTO) {
+        log.info("Validating login for user: {}", loginRequestDTO.login());
+        return ResponseEntity.ok(this.usersService.validateLogin(loginRequestDTO));
     }
 
 }

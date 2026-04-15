@@ -21,4 +21,6 @@ public interface UsersRepository extends JpaRepository<Users, UUID> {
 	Page<Users> findByNameContainingIgnoreCaseAndDeletedAtIsNull(String name, Pageable pageable);
 
     Page<Users> findByDeletedAtIsNull(Pageable pageable);
+
+	Optional<Users> findByLoginIgnoreCaseAndDeletedAtIsNull(String login);
 }

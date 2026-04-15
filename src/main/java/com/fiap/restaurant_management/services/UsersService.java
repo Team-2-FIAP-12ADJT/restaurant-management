@@ -88,4 +88,24 @@ public class UsersService implements UsersServiceContract {
         log.info("User found with id: {}", user.getId());
         return this.usersMapper.toResponseDTO(user);
     }
+
+    public UsersLoginResponseDTO validateLogin(UsersLoginRequestDTO loginRequestDTO) {
+        Users user = this.usersRepository.findByLoginIgnoreCaseAndDeletedAtIsNull(loginRequestDTO.login())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid login or password"));
+
+        if (!user.getPassword().equals(loginRequestDTO.password())) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid login or password");
+        }
+
+        log.info("User authenticated successfully: {}", user.getLogin());
+
+        return new UsersLoginResponseDTO(
+                user.getId(),
+                user.getName(),
+                user.getEmail(),
+                user.getLogin(),
+                user.getRole().getDescription(),
+                true
+        );
+    }
 }
