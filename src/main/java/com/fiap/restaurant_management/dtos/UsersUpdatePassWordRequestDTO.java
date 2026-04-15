@@ -1,7 +1,5 @@
 package com.fiap.restaurant_management.dtos;
 
-import com.fiap.restaurant_management.enums.RoleEnum;
-import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
