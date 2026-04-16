@@ -2,44 +2,34 @@ package com.fiap.restaurant_management.controllers;
 
 import com.fiap.restaurant_management.dtos.UsersLoginRequestDTO;
 import com.fiap.restaurant_management.dtos.UsersLoginResponseDTO;
-import com.fiap.restaurant_management.entities.Users;
-import com.fiap.restaurant_management.repositories.UsersRepository;
+import com.fiap.restaurant_management.services.interfaces.AuthServiceContract;
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import static org.springframework.http.HttpStatus.UNAUTHORIZED;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("/auth")
-@RequiredArgsConstructor
+@Slf4j
 public class AuthController {
 
-    private final UsersRepository usersRepository;
+    private final AuthServiceContract authService;
 
-    @PostMapping("/login")
-    public ResponseEntity<UsersLoginResponseDTO> login(@Valid @RequestBody UsersLoginRequestDTO request) {
-
-        Users user = usersRepository
-                .findByLoginIgnoreCaseAndDeletedAtIsNull(request.login())
-                .orElseThrow(() -> new ResponseStatusException(UNAUTHORIZED, "Invalid login or password"));
-
-        if (!user.getPassword().equals(request.password())) {
-            throw new ResponseStatusException(UNAUTHORIZED, "Invalid login or password");
-        }
-
-        UsersLoginResponseDTO response = new UsersLoginResponseDTO(
-                user.getId(),
-                user.getName(),
-                user.getEmail(),
-                user.getLogin(),
-                user.getRole().getDescription(),
-                true
-        );
-
-        return ResponseEntity.ok(response);
+    public AuthController(AuthServiceContract authService) {
+        this.authService = Objects.requireNonNull(authService);
     }
 
+    @PostMapping("/login")
+    public ResponseEntity<UsersLoginResponseDTO> login(
+            @Valid @RequestBody UsersLoginRequestDTO usersLoginRequestDTO) {
+
+        log.info("Login attempt for user: {}", usersLoginRequestDTO.login());
+
+        return ResponseEntity.ok(authService.login(usersLoginRequestDTO));
+    }
 }

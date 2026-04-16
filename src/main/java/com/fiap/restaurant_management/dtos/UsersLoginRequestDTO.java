@@ -7,7 +7,7 @@ public record UsersLoginRequestDTO(
         @NotBlank(message = "Password is required") String password
 ) {
     public UsersLoginRequestDTO {
-        login = login != null ? login.trim() : null;
-        password = password != null ? password.trim() : null;
+        login = login.trim();
+        password = password.trim();
     }
 }

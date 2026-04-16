@@ -1,9 +1,8 @@
 package com.fiap.restaurant_management.dtos;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
 
-public record UsersLoginResponseDTO(
+public record AuthResultDTO(
         String accessToken,
         LocalDateTime expiresAt
 ) {

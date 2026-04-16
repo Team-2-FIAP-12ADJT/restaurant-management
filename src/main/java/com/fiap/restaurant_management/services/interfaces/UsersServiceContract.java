@@ -20,6 +20,4 @@ public interface UsersServiceContract {
     UsersResponseDTO update(UUID userId, UsersUpdateRequestDTO updateRequestDTO);
 
     UsersResponseDTO findById(UUID userId);
-
-    UsersLoginResponseDTO validateLogin(UsersLoginRequestDTO loginRequestDTO);
 }

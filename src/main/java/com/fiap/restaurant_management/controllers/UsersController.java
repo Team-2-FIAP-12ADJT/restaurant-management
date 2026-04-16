@@ -69,11 +69,4 @@ public class UsersController {
         return ResponseEntity.ok(this.usersService.findById(userId));
     }
 
-    @PostMapping("/login")
-    public ResponseEntity<UsersLoginResponseDTO> validateLogin(
-            @Valid @RequestBody UsersLoginRequestDTO loginRequestDTO) {
-        log.info("Validating login for user: {}", loginRequestDTO.login());
-        return ResponseEntity.ok(this.usersService.validateLogin(loginRequestDTO));
-    }
-
 }
