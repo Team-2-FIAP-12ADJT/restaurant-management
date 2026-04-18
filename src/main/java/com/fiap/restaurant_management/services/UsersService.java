@@ -1,22 +1,22 @@
 package com.fiap.restaurant_management.services;
 
-import com.fiap.restaurant_management.dtos.*;
+import com.fiap.restaurant_management.dtos.UsersFilterDTO;
+import com.fiap.restaurant_management.dtos.UsersRequestDTO;
+import com.fiap.restaurant_management.dtos.UsersResponseDTO;
+import com.fiap.restaurant_management.dtos.UsersUpdateRequestDTO;
 import com.fiap.restaurant_management.entities.Users;
+import com.fiap.restaurant_management.exceptions.ResourceNotFoundException;
 import com.fiap.restaurant_management.exceptions.PasswordUpdateException;
 import com.fiap.restaurant_management.mappers.UsersMapper;
 import com.fiap.restaurant_management.repositories.UsersRepository;
 import com.fiap.restaurant_management.services.interfaces.UsersServiceContract;
-
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
-import com.fiap.restaurant_management.exceptions.ResourceNotFoundException;
-import com.fiap.restaurant_management.dtos.UsersRequestDTO;
-import com.fiap.restaurant_management.dtos.UsersResponseDTO;
 
 import java.util.Objects;
 import java.util.UUID;
