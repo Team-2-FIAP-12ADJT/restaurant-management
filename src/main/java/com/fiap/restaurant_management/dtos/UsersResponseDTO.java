@@ -1,9 +1,9 @@
 package com.fiap.restaurant_management.dtos;
 
+import lombok.Builder;
+
 import java.util.List;
 import java.util.UUID;
-
-import lombok.Builder;
 
 @Builder
 public record UsersResponseDTO(
