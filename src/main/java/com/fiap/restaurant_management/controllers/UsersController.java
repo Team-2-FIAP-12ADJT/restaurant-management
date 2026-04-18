@@ -1,10 +1,6 @@
 package com.fiap.restaurant_management.controllers;
 
-import com.fiap.restaurant_management.dtos.PageResponseDTO;
-import com.fiap.restaurant_management.dtos.UsersFilterDTO;
-import com.fiap.restaurant_management.dtos.UsersRequestDTO;
-import com.fiap.restaurant_management.dtos.UsersResponseDTO;
-import com.fiap.restaurant_management.dtos.UsersUpdateRequestDTO;
+import com.fiap.restaurant_management.dtos.*;
 import com.fiap.restaurant_management.services.interfaces.UsersServiceContract;
 
 import jakarta.validation.Valid;
@@ -65,6 +61,22 @@ public class UsersController {
     public ResponseEntity<UsersResponseDTO> findById(@PathVariable UUID userId) {
         log.info("Finding user with id: {}", userId);
         return ResponseEntity.ok(this.usersService.findById(userId));
+    }
+
+    @DeleteMapping("/{userId}")
+    public  ResponseEntity<Void> delete(@PathVariable UUID userId) {
+        log.info("Deleting user with id: {}", userId);
+        this.usersService.delete(userId);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    @PatchMapping("/{userId}/password")
+    public  ResponseEntity<Void> updatePassWord(
+                @PathVariable UUID userId,
+                @Valid @RequestBody UsersUpdatePasswordRequestDTO usersUpdatePasswordRequestDTO){
+        log.info("Update Pasword user with id: {}", userId);
+        this.usersService.updatePassword(userId, usersUpdatePasswordRequestDTO);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
 }
