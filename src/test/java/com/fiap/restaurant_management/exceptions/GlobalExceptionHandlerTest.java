@@ -20,6 +20,7 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.method.annotation.HandlerMethodValidationException;
 
 import java.net.URI;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -65,8 +66,17 @@ public class GlobalExceptionHandlerTest {
         assertEquals("Um ou mais campos estão inválidos", body.getDetail());
 
         assertNotNull(body.getProperties());
-        Map<String, String> errors = (Map<String, String>) body.getProperties().get("errors");
+        Object errorsObj = body.getProperties().get("errors");
 
+        Map<String, String> errors = new HashMap<>();
+
+        if (errorsObj instanceof Map<?, ?> tempMap) {
+            for (Map.Entry<?, ?> entry : tempMap.entrySet()) {
+                if (entry.getKey() instanceof String && entry.getValue() instanceof String) {
+                    errors.put((String) entry.getKey(), (String) entry.getValue());
+                }
+            }
+        }
         assertEquals("Nome é obrigatório", errors.get("name"));
         assertEquals("Email inválido", errors.get("email"));
     }
@@ -100,7 +110,17 @@ public class GlobalExceptionHandlerTest {
         assertEquals("Um ou mais campos estão inválidos", body.getDetail());
 
         assertNotNull(body.getProperties());
-        Map<String, String> errors = (Map<String, String>) body.getProperties().get("errors");
+        Object errorsObj = body.getProperties().get("errors");
+
+        Map<String, String> errors = new HashMap<>();
+
+        if (errorsObj instanceof Map<?, ?> tempMap) {
+            for (Map.Entry<?, ?> entry : tempMap.entrySet()) {
+                if (entry.getKey() instanceof String && entry.getValue() instanceof String) {
+                    errors.put((String) entry.getKey(), (String) entry.getValue());
+                }
+            }
+        }
 
         assertEquals("Idade inválida", errors.get("age"));
     }
@@ -121,6 +141,7 @@ public class GlobalExceptionHandlerTest {
         );
     }
 
+    @SuppressWarnings("unused")
     private void dummyMethod(@Valid Object obj) {
     }
 
