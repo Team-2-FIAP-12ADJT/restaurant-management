@@ -2,8 +2,6 @@ package com.fiap.restaurant_management.controllers;
 
 import com.fiap.restaurant_management.dtos.*;
 import com.fiap.restaurant_management.services.interfaces.UsersServiceContract;
-import com.fiap.restaurant_management.dtos.UsersLoginRequestDTO;
-import com.fiap.restaurant_management.dtos.UsersLoginResponseDTO;
 
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
@@ -66,16 +64,16 @@ public class UsersController {
     }
 
     @DeleteMapping("/{userId}")
-    public  ResponseEntity<Void> delete(@PathVariable UUID userId) {
+    public ResponseEntity<Void> delete(@PathVariable UUID userId) {
         log.info("Deleting user with id: {}", userId);
         this.usersService.delete(userId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     @PatchMapping("/{userId}/password")
-    public  ResponseEntity<Void> updatePassWord(
-                @PathVariable UUID userId,
-                @Valid @RequestBody UsersUpdatePasswordRequestDTO usersUpdatePasswordRequestDTO){
+    public ResponseEntity<Void> updatePassWord(
+            @PathVariable UUID userId,
+            @Valid @RequestBody UsersUpdatePasswordRequestDTO usersUpdatePasswordRequestDTO) {
         log.info("Update Pasword user with id: {}", userId);
         this.usersService.updatePassword(userId, usersUpdatePasswordRequestDTO);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
