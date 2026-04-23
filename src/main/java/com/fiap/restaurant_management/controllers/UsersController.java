@@ -1,10 +1,8 @@
 package com.fiap.restaurant_management.controllers;
 
+import com.fiap.restaurant_management.controllers.interfaces.UsersControllerContract;
 import com.fiap.restaurant_management.dtos.*;
 import com.fiap.restaurant_management.services.interfaces.UsersServiceContract;
-import com.fiap.restaurant_management.dtos.UsersLoginRequestDTO;
-import com.fiap.restaurant_management.dtos.UsersLoginResponseDTO;
-
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -21,7 +19,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/users")
 @Slf4j
-public class UsersController {
+public class UsersController implements UsersControllerContract {
 
     private final UsersServiceContract usersService;
 
@@ -51,10 +49,11 @@ public class UsersController {
         return ResponseEntity.ok(response);
     }
 
+    @Override
     @PatchMapping("/{userId}")
     public ResponseEntity<UsersResponseDTO> update(
             @PathVariable UUID userId,
-            @Valid @RequestBody UsersUpdateRequestDTO updateRequestDTO) {
+            @RequestBody UsersUpdateRequestDTO updateRequestDTO) {
         log.info("Updating user with id: {}", userId);
         return ResponseEntity.ok(this.usersService.update(userId, updateRequestDTO));
     }
@@ -75,7 +74,7 @@ public class UsersController {
     @PatchMapping("/{userId}/password")
     public  ResponseEntity<Void> updatePassWord(
                 @PathVariable UUID userId,
-                @Valid @RequestBody UsersUpdatePasswordRequestDTO usersUpdatePasswordRequestDTO){
+                @RequestBody UsersUpdatePasswordRequestDTO usersUpdatePasswordRequestDTO){
         log.info("Update Pasword user with id: {}", userId);
         this.usersService.updatePassword(userId, usersUpdatePasswordRequestDTO);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
