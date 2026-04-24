@@ -21,7 +21,7 @@ public record UsersRequestDTO(
         public UsersRequestDTO {
                 name = name != null ? name.trim() : null;
                 login = login != null ? login.trim() : null;
-                email = email != null ? email.trim() : null;
+                email = email != null ? email.trim().toLowerCase() : null;
                 password = password != null ? password.trim() : null;
         }
 }
