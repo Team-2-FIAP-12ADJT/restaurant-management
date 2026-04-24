@@ -10,7 +10,7 @@ services:
     ports:
       - "${SPRING_DATASOURCE_PORT}:5432"
     volumes:
-      - pgdata:/var/lib/postgresql/data
+      - pgdata:/var/lib/postgresql
 
   app:
     build: .
@@ -29,8 +29,8 @@ services:
       SPRING_PROFILES_ACTIVE: dev
       APP_PORT: ${APP_PORT}
     volumes:
-      - .:/app:delegated           # Espelha o código fonte e o target do host; o DevTools reinicia ao receber classes recompiladas
-      - maven_cache:/root/.m2      # Volume nomeado para persistir dependências Maven
+      - .:/app:delegated # Espelha o código fonte e o target do host; o DevTools reinicia ao receber classes recompiladas
+      - maven_cache:/root/.m2 # Volume nomeado para persistir dependências Maven
     # Comando que inicia o Spring com DevTools e suporte a Debug
     command: ./mvnw spring-boot:run -Dspring-boot.run.jvmArguments="-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005"
 

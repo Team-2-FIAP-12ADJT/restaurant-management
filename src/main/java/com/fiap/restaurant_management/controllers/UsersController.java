@@ -65,7 +65,7 @@ public class UsersController implements UsersControllerContract {
     }
 
     @DeleteMapping("/{userId}")
-    public  ResponseEntity<Void> delete(@PathVariable UUID userId) {
+    public ResponseEntity<Void> delete(@PathVariable UUID userId) {
         log.info("Deleting user with id: {}", userId);
         this.usersService.delete(userId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
@@ -74,7 +74,7 @@ public class UsersController implements UsersControllerContract {
     @PatchMapping("/{userId}/password")
     public  ResponseEntity<Void> updatePassWord(
                 @PathVariable UUID userId,
-                @RequestBody UsersUpdatePasswordRequestDTO usersUpdatePasswordRequestDTO){
+                @RequestBody UsersUpdatePasswordRequestDTO usersUpdatePasswordRequestDTO) {
         log.info("Update Pasword user with id: {}", userId);
         this.usersService.updatePassword(userId, usersUpdatePasswordRequestDTO);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
