@@ -1,5 +1,6 @@
 package com.fiap.restaurant_management.controllers.interfaces;
 
+import com.fiap.restaurant_management.controllers.ApiPaths;
 import com.fiap.restaurant_management.dtos.UsersLoginRequestDTO;
 import com.fiap.restaurant_management.dtos.UsersLoginResponseDTO;
 import com.fiap.restaurant_management.dtos.ValidationErrorResponseDTO;
@@ -16,7 +17,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-@RequestMapping("/auth")
+@RequestMapping(ApiPaths.V1_AUTH)
 @Validated
 @Tag(name = "Auth", description = "Gerenciamento de autenticação")
 public interface AuthControllerContract {

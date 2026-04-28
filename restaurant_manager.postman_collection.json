@@ -1,9 +1,9 @@
 {
   "info": {
-    "_postman_id": "57cc0810-e90d-4bf8-873a-b68359e6d7cf",
+    "_postman_id": "74d4c6ec-0773-48dd-820e-0b0416a12cad",
     "name": "restaurant_manager",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-    "_exporter_id": "22096535"
+    "_exporter_id": "14270995"
   },
   "item": [
     {
@@ -16,7 +16,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"name\": \"{{$randomFullName}}\",\n    \"email\": \"{{$randomEmail}}\",\n    \"password\": \"jhtaNjnxy@\",\n    \"role\": 2,\n    \"login\": \"{{$randomUserName}}\",\n    \"address\": {\n        \"street\": \"{{$randomStreetName}}\",\n        \"number\": \"{{$randomAlphaNumeric}}\",\n        \"neighborhood\": \"{{$randomLoremWord}}\",\n        \"city\": \"{{$randomCity}}\",\n        \"state\": \"RJ\",\n        \"country\": \"{{$randomCountry}}\",\n        \"zipCode\": \"00000-000\"\n    }\n}",
+              "raw": "{\n    \"name\": \"{{$randomFullName}}\",\n    \"email\": \"{{$randomEmail}}\",\n    \"password\": \"JhtaNjnxy55@\",\n    \"role\": 2,\n    \"login\": \"{{$randomUserName}}\",\n    \"address\": {\n        \"street\": \"{{$randomStreetName}}\",\n        \"number\": \"{{$randomAlphaNumeric}}\",\n        \"neighborhood\": \"{{$randomLoremWord}}\",\n        \"city\": \"{{$randomCity}}\",\n        \"state\": \"RJ\",\n        \"country\": \"{{$randomCountry}}\",\n        \"zipCode\": \"00000-000\"\n    }\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -24,9 +24,9 @@
               }
             },
             "url": {
-              "raw": "{{baseUrl}}/users",
+              "raw": "{{baseUrl}}{{version}}/users",
               "host": [
-                "{{baseUrl}}"
+                "{{baseUrl}}{{version}}"
               ],
               "path": [
                 "users"
@@ -60,7 +60,7 @@
               },
               "status": "Conflict",
               "code": 409,
-              "_postman_previewlanguage": null,
+              "_postman_previewlanguage": "Text",
               "header": [
                 {
                   "key": "Content-Type",
@@ -112,7 +112,7 @@
               },
               "status": "Created",
               "code": 201,
-              "_postman_previewlanguage": null,
+              "_postman_previewlanguage": "Text",
               "header": [
                 {
                   "key": "Content-Type",
@@ -164,7 +164,7 @@
               },
               "status": "Bad Request",
               "code": 400,
-              "_postman_previewlanguage": null,
+              "_postman_previewlanguage": "Text",
               "header": [
                 {
                   "key": "Content-Type",
@@ -197,18 +197,18 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/users/:id",
+              "raw": "{{baseUrl}}{{version}}/users/::id",
               "host": [
-                "{{baseUrl}}"
+                "{{baseUrl}}{{version}}"
               ],
               "path": [
                 "users",
-                ":id"
+                "::id"
               ],
               "variable": [
                 {
-                  "key": "id",
-                  "value": "84934a2f-c0a4-42a6-ace3-aa8a7df42289"
+                  "key": ":id",
+                  "value": "9d27e6bd-9bca-4782-9517-1845b71fe48c"
                 }
               ]
             }
@@ -241,7 +241,7 @@
               },
               "status": "OK",
               "code": 200,
-              "_postman_previewlanguage": null,
+              "_postman_previewlanguage": "Text",
               "header": [
                 {
                   "key": "Content-Type",
@@ -275,7 +275,7 @@
               },
               "status": "Not Found",
               "code": 404,
-              "_postman_previewlanguage": null,
+              "_postman_previewlanguage": "Text",
               "header": [
                 {
                   "key": "Content-Type",
@@ -325,7 +325,7 @@
               },
               "status": "Bad Request",
               "code": 400,
-              "_postman_previewlanguage": null,
+              "_postman_previewlanguage": "Text",
               "header": [
                 {
                   "key": "Content-Type",
@@ -355,9 +355,9 @@
             "method": "DELETE",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/users/::uderId",
+              "raw": "{{baseUrl}}{{version}}/users/::uderId",
               "host": [
-                "{{baseUrl}}"
+                "{{baseUrl}}{{version}}"
               ],
               "path": [
                 "users",
@@ -366,7 +366,7 @@
               "variable": [
                 {
                   "key": ":uderId",
-                  "value": "3102c816-82e0-4317-9760-033601c76a28"
+                  "value": "d74e0b7e-d90b-4fb8-8e09-01b5d73f457e"
                 }
               ]
             }
@@ -396,7 +396,7 @@
               },
               "status": "OK",
               "code": 200,
-              "_postman_previewlanguage": null,
+              "_postman_previewlanguage": "Text",
               "header": [
                 {
                   "key": "Content-Type",
@@ -430,7 +430,7 @@
               },
               "status": "Not Found",
               "code": 404,
-              "_postman_previewlanguage": null,
+              "_postman_previewlanguage": "Text",
               "header": [
                 {
                   "key": "Content-Type",
@@ -464,9 +464,9 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/users",
+              "raw": "{{baseUrl}}{{version}}/users",
               "host": [
-                "{{baseUrl}}"
+                "{{baseUrl}}{{version}}"
               ],
               "path": [
                 "users"
@@ -491,7 +491,7 @@
               },
               "status": "OK",
               "code": 200,
-              "_postman_previewlanguage": null,
+              "_postman_previewlanguage": "Text",
               "header": [
                 {
                   "key": "Content-Type",
@@ -518,9 +518,9 @@
               "raw": "{\n    \"name\": \"Updated Name\",\n    \"login\": \"Juliana_Thompson722\",\n    \"email\": \"Sonia52@gmail.com\",\n    \"role\": 1\n}"
             },
             "url": {
-              "raw": "{{baseUrl}}/users/:userId",
+              "raw": "{{baseUrl}}{{version}}/users/:userId",
               "host": [
-                "{{baseUrl}}"
+                "{{baseUrl}}{{version}}"
               ],
               "path": [
                 "users",
@@ -529,7 +529,7 @@
               "variable": [
                 {
                   "key": "userId",
-                  "value": "84934a2f-c0a4-42a6-ace3-aa8a7df42289"
+                  "value": "9d27e6bd-9bca-4782-9517-1845b71fe48c"
                 }
               ]
             }
@@ -568,7 +568,7 @@
               },
               "status": "Not Found",
               "code": 404,
-              "_postman_previewlanguage": null,
+              "_postman_previewlanguage": "Text",
               "header": [
                 {
                   "key": "Content-Type",
@@ -627,7 +627,7 @@
               },
               "status": "OK",
               "code": 200,
-              "_postman_previewlanguage": null,
+              "_postman_previewlanguage": "Text",
               "header": [
                 {
                   "key": "Content-Type",
@@ -686,7 +686,7 @@
               },
               "status": "Conflict",
               "code": 409,
-              "_postman_previewlanguage": null,
+              "_postman_previewlanguage": "Text",
               "header": [
                 {
                   "key": "Content-Type",
@@ -726,7 +726,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"oldPassword\": \"jhtc5zaNjnxy@\",\n    \"newPassword\": \"jhtc5zaNjnxy%\"\n}",
+              "raw": "{\n    \"oldPassword\": \"JhtaNjnxy55@\",\n    \"newPassword\": \"JhtaNjnxy56@\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -734,9 +734,9 @@
               }
             },
             "url": {
-              "raw": "{{baseUrl}}/users/:userId/password",
+              "raw": "{{baseUrl}}{{version}}/users/:userId/password",
               "host": [
-                "{{baseUrl}}"
+                "{{baseUrl}}{{version}}"
               ],
               "path": [
                 "users",
@@ -746,8 +746,7 @@
               "variable": [
                 {
                   "key": "userId",
-                  "value": "84934a2f-c0a4-42a6-ace3-aa8a7df42289",
-                  "type": "string"
+                  "value": "4f7dbc63-0a15-4f49-abe7-faacb150d51a"
                 }
               ]
             }
@@ -785,15 +784,14 @@
                   "variable": [
                     {
                       "key": "userId",
-                      "value": "2ab20069-7857-44ac-a2ae-6502a4008300",
-                      "type": "string"
+                      "value": "2ab20069-7857-44ac-a2ae-6502a4008300"
                     }
                   ]
                 }
               },
               "status": "Bad Request",
               "code": 400,
-              "_postman_previewlanguage": null,
+              "_postman_previewlanguage": "Text",
               "header": [
                 {
                   "key": "Content-Type",
@@ -847,15 +845,14 @@
                   "variable": [
                     {
                       "key": "userId",
-                      "value": "2ab20069-7857-44ac-a2ae-6502a4008300",
-                      "type": "string"
+                      "value": "2ab20069-7857-44ac-a2ae-6502a4008300"
                     }
                   ]
                 }
               },
               "status": "Not Found",
               "code": 404,
-              "_postman_previewlanguage": null,
+              "_postman_previewlanguage": "Text",
               "header": [
                 {
                   "key": "Content-Type",
@@ -913,15 +910,14 @@
                   "variable": [
                     {
                       "key": "userId",
-                      "value": "d8498115-782c-416f-b613-b32f033e3e7b",
-                      "type": "string"
+                      "value": "d8498115-782c-416f-b613-b32f033e3e7b"
                     }
                   ]
                 }
               },
               "status": "Bad Request",
               "code": 400,
-              "_postman_previewlanguage": null,
+              "_postman_previewlanguage": "Text",
               "header": [
                 {
                   "key": "Content-Type",
@@ -975,15 +971,14 @@
                   "variable": [
                     {
                       "key": "userId",
-                      "value": "84934a2f-c0a4-42a6-ace3-aa8a7df42289",
-                      "type": "string"
+                      "value": "84934a2f-c0a4-42a6-ace3-aa8a7df42289"
                     }
                   ]
                 }
               },
               "status": "No Content",
               "code": 204,
-              "_postman_previewlanguage": null,
+              "_postman_previewlanguage": "Text",
               "header": [
                 {
                   "key": "Date",
@@ -999,7 +994,7 @@
                 }
               ],
               "cookie": [],
-              "body": null
+              "body": ""
             }
           ]
         }
@@ -1037,7 +1032,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"login\": \"Sandrine.Hegmann\",\n    \"password\": \"jhtc5zaNjnxy@\"\n}",
+              "raw": "{\n    \"login\": \"Toney16\",\n    \"password\": \"JhtaNjnxy55@\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -1045,9 +1040,9 @@
               }
             },
             "url": {
-              "raw": "{{baseUrl}}/auth/login",
+              "raw": "{{baseUrl}}{{version}}/auth/login",
               "host": [
-                "{{baseUrl}}"
+                "{{baseUrl}}{{version}}"
               ],
               "path": [
                 "auth",
@@ -1083,7 +1078,7 @@
               },
               "status": "OK",
               "code": 200,
-              "_postman_previewlanguage": null,
+              "_postman_previewlanguage": "Text",
               "header": [
                 {
                   "key": "Content-Type",
@@ -1136,7 +1131,7 @@
               },
               "status": "Unauthorized",
               "code": 401,
-              "_postman_previewlanguage": null,
+              "_postman_previewlanguage": "Text",
               "header": [
                 {
                   "key": "Content-Type",
@@ -1189,7 +1184,7 @@
               },
               "status": "Bad Request",
               "code": 400,
-              "_postman_previewlanguage": null,
+              "_postman_previewlanguage": "Text",
               "header": [
                 {
                   "key": "Content-Type",

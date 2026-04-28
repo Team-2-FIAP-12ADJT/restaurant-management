@@ -1,5 +1,6 @@
 package com.fiap.restaurant_management.controllers.interfaces;
 
+import com.fiap.restaurant_management.controllers.ApiPaths;
 import com.fiap.restaurant_management.dtos.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -22,7 +23,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
-@RequestMapping("/users")
+@RequestMapping(ApiPaths.V1_USERS)
 @Validated
 @Tag(name = "Users", description = "Sistema de gerenciamento de usuários")
 public interface UsersControllerContract {
