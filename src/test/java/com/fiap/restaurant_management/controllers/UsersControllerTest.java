@@ -124,6 +124,34 @@ class UsersControllerTest {
         verify(usersService).findById(userId);
     }
 
+    @Test
+    void shouldDeleteUserSuccessfully() throws Exception {
+        UUID userId = UUID.randomUUID();
+
+        mockMvc.perform(delete("/users/{userId}", userId))
+                .andExpect(status().isNoContent());
+
+        verify(usersService).delete(userId);
+    }
+
+    @Test
+    void shouldUpdatePasswordSuccessfully() throws Exception {
+        UUID userId = UUID.randomUUID();
+
+        UsersUpdatePasswordRequestDTO request =
+                new UsersUpdatePasswordRequestDTO("Old@1234", "New@1234");
+
+        mockMvc.perform(patch("/users/{userId}/password", userId)
+                        .contentType("application/json")
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isNoContent());
+
+        verify(usersService).updatePassword(
+                eq(userId),
+                any(UsersUpdatePasswordRequestDTO.class)
+        );
+    }
+
     private UsersRequestDTO buildValidUsersRequestDTO() {
         return new UsersRequestDTO(
                 "Strong@123",
