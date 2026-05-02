@@ -9,8 +9,8 @@ import com.fiap.restaurant_management.entities.Users;
 import com.fiap.restaurant_management.enums.RoleEnum;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mapstruct.factory.Mappers;
 
+import java.util.List;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -21,14 +21,14 @@ class UsersMapperTest {
 
     @BeforeEach
     void setup() {
-        mapper = Mappers.getMapper(UsersMapper.class);
+        mapper = new UsersMapperImpl();
     }
 
     @Test
     void shouldMapUserAndBindAddress_whenAddressIsPresent() {
         AddressRequestDTO adressdto = buildValidDTO();
         UsersRequestDTO dto = new UsersRequestDTO(
-                "1234", "Gustavo","gusat","email@test.com", RoleEnum.OWNER, adressdto
+                "1234", "Gustavo","gusat","email@test.com", RoleEnum.OWNER, List.of(adressdto)
         );
 
         Users user = mapper.toEntity(dto);
@@ -66,7 +66,7 @@ class UsersMapperTest {
         entity.setPassword("senhaOriginal");
 
         UsersUpdateRequestDTO dto = new UsersUpdateRequestDTO(
-                "Nome", "novo@email.com", "novaSenha",RoleEnum.CLIENT
+                "Nome", "novoLogin", "novo@email.com", RoleEnum.CLIENT
         );
 
         mapper.updateEntityFromDto(dto, entity);

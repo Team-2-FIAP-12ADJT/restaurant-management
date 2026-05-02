@@ -14,6 +14,8 @@ import org.mapstruct.NullValuePropertyMappingStrategy;
 import com.fiap.restaurant_management.dtos.UsersResponseDTO;
 import com.fiap.restaurant_management.dtos.AddressResponseDTO;
 
+import java.util.List;
+
 @Mapper(componentModel = "spring")
 public interface UsersMapper {
     @Mapping(target = "id", ignore = true)
@@ -30,11 +32,13 @@ public interface UsersMapper {
     @Mapping(target = "user", ignore = true)
     Address addressDtoToEntity(AddressRequestDTO addressDto);
 
+    List<Address> addressDtoToEntity(List<AddressRequestDTO> addressDto);
+
     @AfterMapping
     default void bindAddressAction(UsersRequestDTO dto, @MappingTarget Users user) {
         if (dto.address() != null) {
-            Address mappedAddress = this.addressDtoToEntity(dto.address());
-            user.addAddress(mappedAddress);
+            List<Address> mappedAddresses = this.addressDtoToEntity(dto.address());
+            mappedAddresses.forEach(user::addAddress);
         }
     }
 

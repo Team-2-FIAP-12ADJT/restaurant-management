@@ -7,6 +7,8 @@ import jakarta.validation.constraints.Size;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.Valid;
 
+import java.util.List;
+
 import com.fiap.restaurant_management.enums.RoleEnum;
 
 public record UsersRequestDTO(
@@ -16,7 +18,7 @@ public record UsersRequestDTO(
                 @NotBlank(message = "Email is required") @Email(message = "Email should be valid") String email,
                 @NotNull(message = "Role is required") RoleEnum role,
 
-                @Valid @NotNull(message = "Address details are required") AddressRequestDTO address) {
+                @Valid @NotNull(message = "Address details are required") List<AddressRequestDTO> address) {
 
         public UsersRequestDTO {
                 name = name != null ? name.trim() : null;

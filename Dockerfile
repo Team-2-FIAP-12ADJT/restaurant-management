@@ -9,5 +9,7 @@ WORKDIR /app
 EXPOSE 8080
 EXPOSE 5005
 
-# Garante permissão de execução para o wrapper após o volume do projeto ser montado
-CMD ["sh", "-c", "chmod +x ./mvnw && exec ./mvnw spring-boot:run"]
+# Garante permissão de execução para o wrapper após o volume do projeto ser montado.
+# `target` fica isolado em volume próprio no compose; por isso não usamos `clean`,
+# que tentaria remover o ponto de montagem `/app/target`.
+CMD ["sh", "-c", "chmod +x ./mvnw && exec ./mvnw spring-boot:run -Dmaven.test.skip=true"]
