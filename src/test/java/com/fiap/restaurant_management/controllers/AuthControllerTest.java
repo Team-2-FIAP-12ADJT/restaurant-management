@@ -46,7 +46,7 @@ class AuthControllerTest {
 
         when(authService.login(any())).thenReturn(response);
 
-        mockMvc.perform(post("/auth/login")
+        mockMvc.perform(post(ApiPaths.V1_AUTH_LOGIN)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk())
@@ -60,7 +60,7 @@ class AuthControllerTest {
                 "123456"
         );
 
-        mockMvc.perform(post("/auth/login")
+        mockMvc.perform(post(ApiPaths.V1_AUTH_LOGIN)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isBadRequest());
@@ -73,7 +73,7 @@ class AuthControllerTest {
                 "" // inválido
         );
 
-        mockMvc.perform(post("/auth/login")
+        mockMvc.perform(post(ApiPaths.V1_AUTH_LOGIN)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isBadRequest());
@@ -88,7 +88,7 @@ class AuthControllerTest {
 
         when(authService.login(any())).thenReturn(new UsersLoginResponseDTO("token",LocalDateTime.now()));
 
-        mockMvc.perform(post("/auth/login")
+        mockMvc.perform(post(ApiPaths.V1_AUTH_LOGIN)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk());

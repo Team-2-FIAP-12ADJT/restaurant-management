@@ -4,6 +4,7 @@ import com.fiap.restaurant_management.controllers.interfaces.AuthControllerContr
 import com.fiap.restaurant_management.dtos.UsersLoginRequestDTO;
 import com.fiap.restaurant_management.dtos.UsersLoginResponseDTO;
 import com.fiap.restaurant_management.services.interfaces.AuthServiceContract;
+import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,7 +24,7 @@ public class AuthController implements AuthControllerContract {
 
     @Override
     public ResponseEntity<UsersLoginResponseDTO> login(
-            @RequestBody UsersLoginRequestDTO usersLoginRequestDTO) {
+            @Valid @RequestBody UsersLoginRequestDTO usersLoginRequestDTO) {
 
         log.info("Login attempt for user: {}", usersLoginRequestDTO.login());
 

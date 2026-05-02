@@ -11,6 +11,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import io.swagger.v3.oas.annotations.Parameter;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Objects;
@@ -34,7 +35,7 @@ public class UsersController implements UsersControllerContract {
     @Override
     public ResponseEntity<PageResponseDTO<UsersResponseDTO>> findUsers(
             UsersFilterDTO filter,
-            @PageableDefault(sort = "createdAt", direction = Sort.Direction.ASC) Pageable pageable) {
+            @Parameter(hidden = true) @PageableDefault(sort = "createdAt", direction = Sort.Direction.ASC) Pageable pageable) {
 
         Page<UsersResponseDTO> usersPage = this.usersService.findUsers(filter, pageable);
 
@@ -51,7 +52,7 @@ public class UsersController implements UsersControllerContract {
     @Override
     public ResponseEntity<UsersResponseDTO> update(
             @PathVariable UUID userId,
-            @RequestBody UsersUpdateRequestDTO updateRequestDTO) {
+            @Valid @RequestBody UsersUpdateRequestDTO updateRequestDTO) {
         log.info("Updating user with id: {}", userId);
         return ResponseEntity.ok(this.usersService.update(userId, updateRequestDTO));
     }
@@ -70,9 +71,9 @@ public class UsersController implements UsersControllerContract {
     }
 
     @Override
-    public  ResponseEntity<Void> updatePassWord(
-                @PathVariable UUID userId,
-                @RequestBody UsersUpdatePasswordRequestDTO usersUpdatePasswordRequestDTO) {
+    public ResponseEntity<Void> updatePassWord(
+            @PathVariable UUID userId,
+            @Valid @RequestBody UsersUpdatePasswordRequestDTO usersUpdatePasswordRequestDTO) {
         log.info("Update Pasword user with id: {}", userId);
         this.usersService.updatePassword(userId, usersUpdatePasswordRequestDTO);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();

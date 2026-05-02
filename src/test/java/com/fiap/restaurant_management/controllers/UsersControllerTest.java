@@ -41,7 +41,7 @@ class UsersControllerTest {
 
         when(usersService.create(any())).thenReturn(response);
 
-        mockMvc.perform(post("/users")
+        mockMvc.perform(post(ApiPaths.V1_USERS)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isCreated());
@@ -54,7 +54,7 @@ class UsersControllerTest {
         // DTO vazio
         UsersRequestDTO request = buildInvalidUsersRequestDTO();
 
-        mockMvc.perform(post("/users")
+        mockMvc.perform(post(ApiPaths.V1_USERS)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isBadRequest());
@@ -72,7 +72,7 @@ class UsersControllerTest {
 
         when(usersService.findUsers(any(), any())).thenReturn(page);
 
-        mockMvc.perform(get("/users"))
+        mockMvc.perform(get(ApiPaths.V1_USERS))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content").isArray())
                 .andExpect(jsonPath("$.page").value(1)) // você soma +1 no controller
@@ -90,7 +90,7 @@ class UsersControllerTest {
 
         when(usersService.update(eq(userId), any())).thenReturn(response);
 
-        mockMvc.perform(patch("/users/{userId}", userId)
+        mockMvc.perform(patch(ApiPaths.V1_USERS + "/{userId}", userId)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk());
@@ -104,7 +104,7 @@ class UsersControllerTest {
 
         UsersUpdateRequestDTO request = buildInvClientUpdateReques();
 
-        mockMvc.perform(patch("/users/{userId}", userId)
+        mockMvc.perform(patch(ApiPaths.V1_USERS + "/{userId}", userId)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isBadRequest());
@@ -118,7 +118,7 @@ class UsersControllerTest {
 
         when(usersService.findById(userId)).thenReturn(response);
 
-        mockMvc.perform(get("/users/{userId}", userId))
+        mockMvc.perform(get(ApiPaths.V1_USERS + "/{userId}", userId))
                 .andExpect(status().isOk());
 
         verify(usersService).findById(userId);
