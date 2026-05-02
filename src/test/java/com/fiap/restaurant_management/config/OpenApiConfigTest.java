@@ -3,7 +3,6 @@ package com.fiap.restaurant_management.config;
 import com.fiap.restaurant_management.controllers.ApiPaths;
 import com.fiap.restaurant_management.controllers.AuthController;
 import com.fiap.restaurant_management.controllers.UsersController;
-import com.fiap.restaurant_management.services.interfaces.AddressServiceContract;
 import com.fiap.restaurant_management.services.interfaces.AuthServiceContract;
 import com.fiap.restaurant_management.services.interfaces.UsersServiceContract;
 import org.junit.jupiter.api.Test;
@@ -42,9 +41,6 @@ class OpenApiConfigTest {
 
         @Autowired
         private MockMvc mockMvc;
-
-        @MockitoBean
-        private AddressServiceContract addressService;
 
         @MockitoBean
         private AuthServiceContract authService;
