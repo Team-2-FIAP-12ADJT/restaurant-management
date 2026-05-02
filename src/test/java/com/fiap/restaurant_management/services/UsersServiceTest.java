@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.*;
 import org.springframework.data.domain.*;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.*;
@@ -165,15 +166,6 @@ class UsersServiceTest {
     }
 
     @Test
-    void shouldSoftDeleteUser() {
-        when(repository.findByIdAndDeletedAtIsNull(userId)).thenReturn(Optional.of(user));
-
-        service.delete(userId);
-
-        verify(repository).save(user);
-    }
-
-    @Test
     void shouldUpdatePasswordSuccessfully() {
         UsersUpdatePasswordRequestDTO dto = mock(UsersUpdatePasswordRequestDTO.class);
 
@@ -219,4 +211,195 @@ class UsersServiceTest {
         assertThrows(PasswordUpdateException.class,
                 () -> service.updatePassword(userId, dto));
     }
+
+    @Test
+    void shouldFindAllUsersWhenNameIsBlank() {
+        Pageable pageable = PageRequest.of(0, 10);
+
+        UsersFilterDTO filter = mock(UsersFilterDTO.class);
+        when(filter.name()).thenReturn("   ");
+
+        Page<Users> page = new PageImpl<>(List.of(user));
+
+        when(repository.findByDeletedAtIsNull(pageable)).thenReturn(page);
+        when(mapper.toResponseDTO(any())).thenReturn(mock(UsersResponseDTO.class));
+
+        Page<UsersResponseDTO> result = service.findUsers(filter, pageable);
+
+        assertEquals(1, result.getTotalElements());
+
+        verify(repository).findByDeletedAtIsNull(pageable);
+        verify(repository, never())
+                .findByNameContainingIgnoreCaseAndDeletedAtIsNull(any(), any());
+    }
+
+    @Test
+    void shouldThrowNotFoundWhenUserDoesNotExist() {
+        UUID userId = UUID.randomUUID();
+
+        when(repository.findByIdAndDeletedAtIsNull(userId))
+                .thenReturn(Optional.empty());
+
+        assertThrows(ResourceNotFoundException.class,
+                () -> service.findById(userId));
+
+        verify(repository).findByIdAndDeletedAtIsNull(userId);
+    }
+
+    @Test
+    void shouldThrowConflictWhenLoginAlreadyExistsOnUpdate() {
+        UUID userId = UUID.randomUUID();
+
+        Users existingUser = mock(Users.class);
+        UsersUpdateRequestDTO dto = mock(UsersUpdateRequestDTO.class);
+
+        when(repository.findByIdAndDeletedAtIsNull(userId))
+                .thenReturn(Optional.of(existingUser));
+
+        when(dto.login()).thenReturn("newLogin");
+        when(existingUser.isLoginChanging("newLogin")).thenReturn(true);
+        when(repository.existsByLoginIgnoreCase("newLogin")).thenReturn(true);
+
+        ResponseStatusException ex = assertThrows(ResponseStatusException.class,
+                () -> service.update(userId, dto));
+
+        assertEquals(HttpStatus.CONFLICT, ex.getStatusCode());
+        assertEquals("Login already exists", ex.getReason());
+    }
+
+    @Test
+    void shouldThrowConflictWhenEmailAlreadyExistsOnUpdate() {
+        UUID userId = UUID.randomUUID();
+
+        Users existingUser = mock(Users.class);
+        UsersUpdateRequestDTO dto = mock(UsersUpdateRequestDTO.class);
+
+        when(repository.findByIdAndDeletedAtIsNull(userId))
+                .thenReturn(Optional.of(existingUser));
+
+        when(dto.email()).thenReturn("email@test.com");
+        when(existingUser.isEmailChanging("email@test.com")).thenReturn(true);
+        when(repository.existsByEmailIgnoreCase("email@test.com")).thenReturn(true);
+
+        ResponseStatusException ex = assertThrows(ResponseStatusException.class,
+                () -> service.update(userId, dto));
+
+        assertEquals(HttpStatus.CONFLICT, ex.getStatusCode());
+        assertEquals("Email already exists", ex.getReason());
+    }
+
+    @Test
+    void shouldNotCheckLoginWhenLoginIsNotChanging() {
+        Users user = mock(Users.class);
+
+        UsersUpdateRequestDTO dto = mock(UsersUpdateRequestDTO.class);
+
+        when(dto.login()).thenReturn("sameLogin");
+
+        when(repository.findByIdAndDeletedAtIsNull(userId))
+                .thenReturn(Optional.of(user));
+
+        when(user.isLoginChanging("sameLogin")).thenReturn(false);
+
+        when(repository.save(any())).thenReturn(user);
+        when(mapper.toResponseDTO(any())).thenReturn(mock(UsersResponseDTO.class));
+
+        service.update(userId, dto);
+
+        verify(repository, never()).existsByLoginIgnoreCase(any());
+    }
+
+    @Test
+    void shouldNotCheckEmailWhenEmailIsNotChanging() {
+        Users user = mock(Users.class);
+
+        UsersUpdateRequestDTO dto = mock(UsersUpdateRequestDTO.class);
+
+        when(dto.email()).thenReturn("same@email.com");
+
+        when(repository.findByIdAndDeletedAtIsNull(userId))
+                .thenReturn(Optional.of(user));
+
+        when(user.isEmailChanging("same@email.com")).thenReturn(false);
+
+        when(repository.save(any())).thenReturn(user);
+        when(mapper.toResponseDTO(any())).thenReturn(mock(UsersResponseDTO.class));
+
+        service.update(userId, dto);
+
+        verify(repository, never()).existsByEmailIgnoreCase(any());
+    }
+
+    @Test
+    void shouldAllowUpdateWhenLoginChangesButDoesNotExist() {
+        user.setLogin("oldLogin");
+
+        UsersUpdateRequestDTO dto = mock(UsersUpdateRequestDTO.class);
+        when(dto.login()).thenReturn("newLogin");
+
+        when(repository.findByIdAndDeletedAtIsNull(userId))
+                .thenReturn(Optional.of(user));
+
+        when(repository.existsByLoginIgnoreCase("newLogin"))
+                .thenReturn(false);
+
+        when(repository.save(any())).thenReturn(user);
+        when(mapper.toResponseDTO(any())).thenReturn(mock(UsersResponseDTO.class));
+
+        service.update(userId, dto);
+
+        verify(repository).existsByLoginIgnoreCase("newLogin");
+    }
+
+    @Test
+    void shouldAllowUpdateWhenEmailChangesButDoesNotExist() {
+        Users user = mock(Users.class);
+
+        UsersUpdateRequestDTO dto = mock(UsersUpdateRequestDTO.class);
+
+        when(dto.email()).thenReturn("new@email.com");
+
+        when(repository.findByIdAndDeletedAtIsNull(userId))
+                .thenReturn(Optional.of(user));
+
+        when(user.isEmailChanging("new@email.com")).thenReturn(true);
+        when(repository.existsByEmailIgnoreCase("new@email.com")).thenReturn(false);
+
+        when(repository.save(any())).thenReturn(user);
+        when(mapper.toResponseDTO(any())).thenReturn(mock(UsersResponseDTO.class));
+
+        service.update(userId, dto);
+
+        verify(repository).existsByEmailIgnoreCase("new@email.com");
+    }
+
+    @Test
+    void shouldSoftDeleteUser() {
+        when(repository.findByIdAndDeletedAtIsNull(userId)).thenReturn(Optional.of(user));
+
+        service.delete(userId);
+
+        verify(repository).save(user);
+    }
+
+    @Test
+    void shouldThrowWhenUpdatingPasswordForNonExistingUser() {
+        UsersUpdatePasswordRequestDTO dto = mock(UsersUpdatePasswordRequestDTO.class);
+
+        when(repository.findByIdAndDeletedAtIsNull(userId))
+                .thenReturn(Optional.empty());
+
+        assertThrows(ResourceNotFoundException.class,
+                () -> service.updatePassword(userId, dto));
+    }
+
+    @Test
+    void shouldThrowWhenDeletingNonExistingUser() {
+        when(repository.findByIdAndDeletedAtIsNull(userId))
+                .thenReturn(Optional.empty());
+
+        assertThrows(ResourceNotFoundException.class,
+                () -> service.delete(userId));
+    }
+
 }

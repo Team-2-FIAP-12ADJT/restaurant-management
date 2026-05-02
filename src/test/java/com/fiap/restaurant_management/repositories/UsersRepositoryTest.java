@@ -29,7 +29,7 @@ class UsersRepositoryTest extends PostgreSQLIntegrationTestSupport {
         user.setPassword("123");
         user.setRole(RoleEnum.OWNER);
 
-        user.setCreatedAt(LocalDateTime.now()); // 🔥 ESSENCIAL
+        user.setCreatedAt(LocalDateTime.now());
 
         return repository.save(user);
     }

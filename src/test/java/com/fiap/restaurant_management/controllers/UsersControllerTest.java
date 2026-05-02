@@ -51,7 +51,6 @@ class UsersControllerTest {
 
     @Test
     void shouldReturnBadRequestWhenCreateInvalid() throws Exception {
-        // DTO vazio
         UsersRequestDTO request = buildInvalidUsersRequestDTO();
 
         mockMvc.perform(post(ApiPaths.V1_USERS)
@@ -75,7 +74,7 @@ class UsersControllerTest {
         mockMvc.perform(get(ApiPaths.V1_USERS))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content").isArray())
-                .andExpect(jsonPath("$.page").value(1)) // você soma +1 no controller
+                .andExpect(jsonPath("$.page").value(1))
                 .andExpect(jsonPath("$.size").value(10));
 
         verify(usersService).findUsers(any(), any());
@@ -83,7 +82,6 @@ class UsersControllerTest {
 
     @Test
     void shouldUpdateUser() throws Exception {
-        // Arrange
         UUID userId = UUID.randomUUID();
         UsersRequestDTO request = buildValidUsersRequestDTO();
         UsersResponseDTO response = buildUsersResponseDTO();
@@ -112,7 +110,6 @@ class UsersControllerTest {
 
     @Test
     void shouldReturnUserById() throws Exception {
-        // Arrange
         UUID userId = UUID.randomUUID();
         UsersResponseDTO response = buildUsersResponseDTO();
 
@@ -122,6 +119,34 @@ class UsersControllerTest {
                 .andExpect(status().isOk());
 
         verify(usersService).findById(userId);
+    }
+
+    @Test
+    void shouldDeleteUserSuccessfully() throws Exception {
+        UUID userId = UUID.randomUUID();
+
+        mockMvc.perform(delete(ApiPaths.V1_USERS + "/{userId}", userId))
+                .andExpect(status().isNoContent());
+
+        verify(usersService).delete(userId);
+    }
+
+    @Test
+    void shouldUpdatePasswordSuccessfully() throws Exception {
+        UUID userId = UUID.randomUUID();
+
+        UsersUpdatePasswordRequestDTO request =
+                new UsersUpdatePasswordRequestDTO("Old@1234", "New@1234");
+
+        mockMvc.perform(patch( ApiPaths.V1_USERS + "/{userId}/password", userId)
+                        .contentType("application/json")
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isNoContent());
+
+        verify(usersService).updatePassword(
+                eq(userId),
+                any(UsersUpdatePasswordRequestDTO.class)
+        );
     }
 
     private UsersRequestDTO buildValidUsersRequestDTO() {

@@ -4,6 +4,7 @@ import com.fiap.restaurant_management.dtos.AuthResultDTO;
 import com.fiap.restaurant_management.dtos.UsersLoginResponseDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mapstruct.factory.Mappers;
 
 import java.time.LocalDateTime;
 
@@ -15,23 +16,43 @@ class AuthMapperTest {
 
     @BeforeEach
     void setup() {
-        mapper = new AuthMapperImpl();
+        mapper = Mappers.getMapper(AuthMapper.class);
     }
 
     @Test
     void shouldMapAuthResultToLoginResponse() {
-        LocalDateTime expiresAt = LocalDateTime.of(2026, 5, 2, 12, 0);
-        AuthResultDTO authResult = new AuthResultDTO("token-123", expiresAt);
+        LocalDateTime expiresAt = LocalDateTime.now();
 
-        UsersLoginResponseDTO response = mapper.toLoginResponseDTO(authResult);
+        AuthResultDTO dto = new AuthResultDTO(
+                "token123",
+                expiresAt
+        );
+
+        UsersLoginResponseDTO response = mapper.toLoginResponseDTO(dto);
 
         assertNotNull(response);
-        assertEquals("token-123", response.accessToken());
+        assertEquals("token123", response.accessToken());
         assertEquals(expiresAt, response.expiresAt());
     }
 
     @Test
-    void shouldReturnNullWhenAuthResultIsNull() {
-        assertNull(mapper.toLoginResponseDTO(null));
+    void shouldReturnNullWhenInputIsNull() {
+        UsersLoginResponseDTO response = mapper.toLoginResponseDTO(null);
+
+        assertNull(response);
+    }
+
+    @Test
+    void shouldMapNullFields() {
+        AuthResultDTO dto = new AuthResultDTO(
+                null,
+                null
+        );
+
+        UsersLoginResponseDTO response = mapper.toLoginResponseDTO(dto);
+
+        assertNotNull(response);
+        assertNull(response.accessToken());
+        assertNull(response.expiresAt());
     }
 }

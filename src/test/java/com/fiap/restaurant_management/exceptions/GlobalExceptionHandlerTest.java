@@ -7,13 +7,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.core.MethodParameter;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ProblemDetail;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
+import org.springframework.validation.ObjectError;
 import org.springframework.validation.method.ParameterValidationResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.context.request.WebRequest;
@@ -139,6 +137,36 @@ public class GlobalExceptionHandlerTest {
                 URI.create("https://api.restaurant-management.com/errors/internal-server-error"),
                 response.getType()
         );
+    }
+
+    @Test
+    void shouldHandleGlobalErrorWhenNotFieldError() {
+        HandlerMethodValidationException ex = mock(HandlerMethodValidationException.class);
+        HttpHeaders headers = new HttpHeaders();
+        HttpStatusCode status = HttpStatus.BAD_REQUEST;
+        WebRequest request = mock(WebRequest.class);
+
+        ProblemDetail problemDetail = ProblemDetail.forStatus(HttpStatus.BAD_REQUEST);
+        when(ex.getBody()).thenReturn(problemDetail);
+
+        ObjectError objectError = new ObjectError("objectName", "erro global");
+
+        ParameterValidationResult validationResult = mock(ParameterValidationResult.class);
+        when(validationResult.getResolvableErrors()).thenReturn(List.of(objectError));
+
+        when(ex.getParameterValidationResults()).thenReturn(List.of(validationResult));
+
+        var handler = new GlobalExceptionHandler();
+
+        ResponseEntity<Object> response = handler.handleHandlerMethodValidationException(
+                ex, headers, status, request
+        );
+
+        assertNotNull(response);
+        ProblemDetail body = (ProblemDetail) response.getBody();
+
+        assertNotNull(body);
+        assertEquals("Um ou mais campos estão inválidos", body.getDetail());
     }
 
     @SuppressWarnings("unused")
