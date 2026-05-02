@@ -29,11 +29,13 @@ services:
       SPRING_PROFILES_ACTIVE: dev
       APP_PORT: ${APP_PORT}
     volumes:
-      - .:/app:delegated # Espelha o código fonte e o target do host; o DevTools reinicia ao receber classes recompiladas
+      - .:/app:delegated # Espelha código fonte
+      - app_target:/app/target # Isola classes geradas/compiladas do container; evita conflito com target do host
       - maven_cache:/root/.m2 # Volume nomeado para persistir dependências Maven
     # Comando que inicia o Spring com DevTools e suporte a Debug
-    command: ./mvnw spring-boot:run -Dspring-boot.run.jvmArguments="-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005"
+    command: ./mvnw spring-boot:run -Dmaven.test.skip=true -Dspring-boot.run.jvmArguments="-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005"
 
 volumes:
   pgdata:
+  app_target:
   maven_cache:

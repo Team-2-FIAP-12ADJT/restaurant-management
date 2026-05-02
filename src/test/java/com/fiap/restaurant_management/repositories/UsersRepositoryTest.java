@@ -1,6 +1,6 @@
 package com.fiap.restaurant_management.repositories;
 
-
+import com.fiap.restaurant_management.PostgreSQLIntegrationTestSupport;
 import com.fiap.restaurant_management.entities.Users;
 import com.fiap.restaurant_management.enums.RoleEnum;
 import org.junit.jupiter.api.DisplayName;
@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-class UsersRepositoryTest {
+class UsersRepositoryTest extends PostgreSQLIntegrationTestSupport {
 
     @Autowired
     private UsersRepository repository;

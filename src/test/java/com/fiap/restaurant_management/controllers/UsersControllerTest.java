@@ -131,7 +131,7 @@ class UsersControllerTest {
                 "gustavo123",
                 "gustavo@email.com",
                 RoleEnum.OWNER,
-                buildValidAddressRequest()
+                List.of(buildValidAddressRequest())
         );
     }
 
@@ -142,7 +142,7 @@ class UsersControllerTest {
                 "gustavo123",
                 "gustavo@email.com",
                 RoleEnum.OWNER,
-                buildInvalidAddressRequest()
+                List.of(buildInvalidAddressRequest())
         );
     }
 
