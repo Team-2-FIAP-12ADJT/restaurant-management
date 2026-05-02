@@ -56,7 +56,7 @@ class AuthControllerTest {
     @Test
     void shouldReturnBadRequest_whenLoginIsInvalid() throws Exception {
         UsersLoginRequestDTO request = new UsersLoginRequestDTO(
-                "", // inválido
+                "",
                 "123456"
         );
 
@@ -70,7 +70,7 @@ class AuthControllerTest {
     void shouldReturnBadRequest_whenPasswordIsInvalid() throws Exception {
         UsersLoginRequestDTO request = new UsersLoginRequestDTO(
                 "gustavo",
-                "" // inválido
+                ""
         );
 
         mockMvc.perform(post(ApiPaths.V1_AUTH_LOGIN)

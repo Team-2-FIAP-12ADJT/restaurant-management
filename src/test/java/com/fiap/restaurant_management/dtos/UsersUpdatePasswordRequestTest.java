@@ -11,7 +11,7 @@ import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class UsersUpdatePasswordRequestDTOTest {
+class UsersUpdatePasswordRequestTest {
 
     private Validator validator;
 
@@ -61,7 +61,7 @@ class UsersUpdatePasswordRequestDTOTest {
     @Test
     void shouldFailWhenOldPasswordDoesNotMatchPattern() {
         var dto = new UsersUpdatePasswordRequestDTO(
-                "password123", // sem maiúscula e especial
+                "password123",
                 "NewPass@123"
         );
 

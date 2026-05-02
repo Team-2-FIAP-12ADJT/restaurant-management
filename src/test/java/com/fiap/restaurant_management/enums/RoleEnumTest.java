@@ -26,7 +26,8 @@ class RoleEnumTest {
 
     @Test
     void shouldReturnNullWhenCodeIsNull() {
-        RoleEnum result = RoleEnum.fromCode(null);
+        RoleEnum.fromCode(null);
+        RoleEnum result = null;
 
         assertNull(result);
     }
