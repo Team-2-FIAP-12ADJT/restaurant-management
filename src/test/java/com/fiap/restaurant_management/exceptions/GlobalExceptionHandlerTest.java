@@ -162,7 +162,6 @@ public class GlobalExceptionHandlerTest {
                 ex, headers, status, request
         );
 
-        assertNotNull(response);
         ProblemDetail body = (ProblemDetail) response.getBody();
 
         assertNotNull(body);

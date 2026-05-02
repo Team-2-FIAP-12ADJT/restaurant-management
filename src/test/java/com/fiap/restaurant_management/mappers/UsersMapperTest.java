@@ -1,9 +1,6 @@
 package com.fiap.restaurant_management.mappers;
 
-import com.fiap.restaurant_management.dtos.AddressRequestDTO;
-import com.fiap.restaurant_management.dtos.UsersRequestDTO;
-import com.fiap.restaurant_management.dtos.UsersResponseDTO;
-import com.fiap.restaurant_management.dtos.UsersUpdateRequestDTO;
+import com.fiap.restaurant_management.dtos.*;
 import com.fiap.restaurant_management.entities.Address;
 import com.fiap.restaurant_management.entities.Users;
 import com.fiap.restaurant_management.enums.RoleEnum;
