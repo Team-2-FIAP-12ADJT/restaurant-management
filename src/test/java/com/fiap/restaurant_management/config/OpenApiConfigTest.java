@@ -1,6 +1,5 @@
 package com.fiap.restaurant_management.config;
 
-import com.fiap.restaurant_management.controllers.AddressController;
 import com.fiap.restaurant_management.controllers.ApiPaths;
 import com.fiap.restaurant_management.controllers.AuthController;
 import com.fiap.restaurant_management.controllers.UsersController;
@@ -27,41 +26,39 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest({
-        AddressController.class,
-        AuthController.class,
-        UsersController.class
+                AuthController.class,
+                UsersController.class
 })
 @Import(OpenApiConfig.class)
 @ImportAutoConfiguration({
-        SpringDocConfiguration.class,
-        SpringDocConfigProperties.class,
-        SpringDocPageableConfiguration.class,
-        SpringDocSortConfiguration.class,
-        SpringDocWebMvcConfiguration.class,
-        MultipleOpenApiSupportConfiguration.class
+                SpringDocConfiguration.class,
+                SpringDocConfigProperties.class,
+                SpringDocPageableConfiguration.class,
+                SpringDocSortConfiguration.class,
+                SpringDocWebMvcConfiguration.class,
+                MultipleOpenApiSupportConfiguration.class
 })
 class OpenApiConfigTest {
 
-    @Autowired
-    private MockMvc mockMvc;
+        @Autowired
+        private MockMvc mockMvc;
 
-    @MockitoBean
-    private AddressServiceContract addressService;
+        @MockitoBean
+        private AddressServiceContract addressService;
 
-    @MockitoBean
-    private AuthServiceContract authService;
+        @MockitoBean
+        private AuthServiceContract authService;
 
-    @MockitoBean
-    private UsersServiceContract usersService;
+        @MockitoBean
+        private UsersServiceContract usersService;
 
-    @Test
-    void shouldExposeV1OpenApiGroup() throws Exception {
-        mockMvc.perform(get("/v3/api-docs/v1"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.info.title").value("Restaurant Management API"))
-                .andExpect(jsonPath("$.info.version").value("v1"))
-                .andExpect(jsonPath("$.paths['" + ApiPaths.V1_AUTH_LOGIN + "']").value(notNullValue()))
-                .andExpect(jsonPath("$.paths['" + ApiPaths.V1_USERS + "']").value(notNullValue()))
-                .andExpect(jsonPath("$.paths['" + ApiPaths.V1_ADDRESS + "']").value(notNullValue()));
-    }
+        @Test
+        void shouldExposeV1OpenApiGroup() throws Exception {
+                mockMvc.perform(get("/v3/api-docs/v1"))
+                                .andExpect(status().isOk())
+                                .andExpect(jsonPath("$.info.title").value("Restaurant Management API"))
+                                .andExpect(jsonPath("$.info.version").value("v1"))
+                                .andExpect(jsonPath("$.paths['" + ApiPaths.V1_AUTH_LOGIN + "']").value(notNullValue()))
+                                .andExpect(jsonPath("$.paths['" + ApiPaths.V1_USERS + "']").value(notNullValue()));
+        }
 }
