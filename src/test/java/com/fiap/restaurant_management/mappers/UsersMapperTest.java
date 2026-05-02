@@ -94,7 +94,7 @@ class UsersMapperTest {
 
         assertNotNull(user.getAddresses());
         assertEquals(1, user.getAddresses().size());
-        assertEquals(user, address.getUser()); // vínculo bidirecional
+        assertEquals(user, address.getUser());
     }
 
     @Test
@@ -124,7 +124,7 @@ class UsersMapperTest {
 
     @Test
     void shouldReturnNullWhenAddressDtoToEntityReceivesNull() {
-        Address result = mapper.addressDtoToEntity(null);
+        Address result = mapper.addressDtoToEntity((AddressRequestDTO) null);
 
         assertNull(result);
     }
@@ -141,15 +141,13 @@ class UsersMapperTest {
 
     @Test
     void shouldMapAllBasicFieldsInToEntity() {
-        AddressRequestDTO addressDTO = buildValidDTO();
-
         UsersRequestDTO dto = new UsersRequestDTO(
                 "Password@123",
                 "Gustavo",
                 "login123",
                 "email@test.com",
                 RoleEnum.CLIENT,
-                addressDTO
+                List.of(buildValidDTO())
         );
 
         Users user = mapper.toEntity(dto);
@@ -197,10 +195,11 @@ class UsersMapperTest {
     }
 
     @Test
-    void shouldReturnNullWhenAddressIsNull() {
-        AddressResponseDTO response = mapper.toAddressResponseDTO(null);
+    void shouldReturnEmptyListWhenInputIsEmpty() {
+        List<Address> result = mapper.addressDtoToEntity(List.of());
 
-        assertNull(response);
+        assertNotNull(result);
+        assertTrue(result.isEmpty());
     }
 
     @Test
@@ -218,6 +217,19 @@ class UsersMapperTest {
         mapper.updateEntityFromDto(dto, entity);
 
         assertEquals("Original", entity.getName());
+    }
+    @Test
+    void shouldReturnNullWhenAddressIsNull() {
+        AddressResponseDTO response = mapper.toAddressResponseDTO(null);
+
+        assertNull(response);
+    }
+
+    @Test
+    void shouldReturnNullWhenAddressDtoListIsNull() {
+        List<Address> result = mapper.addressDtoToEntity((List<AddressRequestDTO>) null);
+
+        assertNull(result);
     }
 
     @Test

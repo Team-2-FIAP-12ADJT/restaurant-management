@@ -51,7 +51,6 @@ class UsersControllerTest {
 
     @Test
     void shouldReturnBadRequestWhenCreateInvalid() throws Exception {
-        // DTO vazio
         UsersRequestDTO request = buildInvalidUsersRequestDTO();
 
         mockMvc.perform(post(ApiPaths.V1_USERS)
@@ -75,7 +74,7 @@ class UsersControllerTest {
         mockMvc.perform(get(ApiPaths.V1_USERS))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content").isArray())
-                .andExpect(jsonPath("$.page").value(1)) // você soma +1 no controller
+                .andExpect(jsonPath("$.page").value(1))
                 .andExpect(jsonPath("$.size").value(10));
 
         verify(usersService).findUsers(any(), any());
@@ -83,7 +82,6 @@ class UsersControllerTest {
 
     @Test
     void shouldUpdateUser() throws Exception {
-        // Arrange
         UUID userId = UUID.randomUUID();
         UsersRequestDTO request = buildValidUsersRequestDTO();
         UsersResponseDTO response = buildUsersResponseDTO();
@@ -112,7 +110,6 @@ class UsersControllerTest {
 
     @Test
     void shouldReturnUserById() throws Exception {
-        // Arrange
         UUID userId = UUID.randomUUID();
         UsersResponseDTO response = buildUsersResponseDTO();
 
@@ -128,7 +125,7 @@ class UsersControllerTest {
     void shouldDeleteUserSuccessfully() throws Exception {
         UUID userId = UUID.randomUUID();
 
-        mockMvc.perform(delete("/users/{userId}", userId))
+        mockMvc.perform(delete(ApiPaths.V1_USERS + "/{userId}", userId))
                 .andExpect(status().isNoContent());
 
         verify(usersService).delete(userId);
@@ -141,7 +138,7 @@ class UsersControllerTest {
         UsersUpdatePasswordRequestDTO request =
                 new UsersUpdatePasswordRequestDTO("Old@1234", "New@1234");
 
-        mockMvc.perform(patch("/users/{userId}/password", userId)
+        mockMvc.perform(patch( ApiPaths.V1_USERS + "/{userId}/password", userId)
                         .contentType("application/json")
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isNoContent());

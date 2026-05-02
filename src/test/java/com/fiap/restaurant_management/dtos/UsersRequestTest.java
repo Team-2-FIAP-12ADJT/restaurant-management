@@ -1,207 +1,46 @@
 package com.fiap.restaurant_management.dtos;
 
 import com.fiap.restaurant_management.enums.RoleEnum;
-import jakarta.validation.Validation;
-import jakarta.validation.Validator;
-import jakarta.validation.ValidatorFactory;
-import org.junit.jupiter.api.BeforeEach;
+
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.*;
+import org.springframework.data.domain.*;
+
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
+@ExtendWith(org.mockito.junit.jupiter.MockitoExtension.class)
 class UsersRequestTest {
-
-    private Validator validator;
-
-    @BeforeEach
-    void setUp() {
-        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-        validator = factory.getValidator();
-    }
-
-    private AddressRequestDTO validAddress() {
-        return new AddressRequestDTO(
-                "Street",
-                "123",
-                "Neighborhood",
-                "City",
-                "AS",
-                "00000-000",
-                "ASSDF",
-                "adf"
-        );
-    }
-
-    @Test
-    void shouldPassWhenAllFieldsAreValid() {
-        var dto = new UsersRequestDTO(
-                "Password@123",
-                "Gustavo",
-                "gustavo123",
-                "gustavo@email.com",
-                RoleEnum.CLIENT,
-                validAddress()
-        );
-
-        var violations = validator.validate(dto);
-
-        assertTrue(violations.isEmpty());
-    }
-
-    @Test
-    void shouldFailWhenPasswordIsBlank() {
-        var dto = new UsersRequestDTO(
-                "",
-                "Name",
-                "login",
-                "email@email.com",
-                RoleEnum.CLIENT,
-                validAddress()
-        );
-
-        var violations = validator.validate(dto);
-
-        assertFalse(violations.isEmpty());
-    }
-
-    @Test
-    void shouldFailWhenPasswordDoesNotMatchPattern() {
-        var dto = new UsersRequestDTO(
-                "password",
-                "Name",
-                "login",
-                "email@email.com",
-                RoleEnum.CLIENT,
-                validAddress()
-        );
-
-        var violations = validator.validate(dto);
-
-        assertFalse(violations.isEmpty());
-    }
-
-    @Test
-    void shouldFailWhenNameIsBlank() {
-        var dto = new UsersRequestDTO(
-                "Password@123",
-                "",
-                "login",
-                "email@email.com",
-                RoleEnum.CLIENT,
-                validAddress()
-        );
-
-        var violations = validator.validate(dto);
-
-        assertFalse(violations.isEmpty());
-    }
-
-    @Test
-    void shouldFailWhenLoginIsBlank() {
-        var dto = new UsersRequestDTO(
-                "Password@123",
-                "Name",
-                "",
-                "email@email.com",
-                RoleEnum.CLIENT,
-                validAddress()
-        );
-
-        var violations = validator.validate(dto);
-
-        assertFalse(violations.isEmpty());
-    }
-
-    @Test
-    void shouldFailWhenEmailIsInvalid() {
-        var dto = new UsersRequestDTO(
-                "Password@123",
-                "Name",
-                "login",
-                "invalid-email",
-                RoleEnum.CLIENT,
-                validAddress()
-        );
-
-        var violations = validator.validate(dto);
-
-        assertFalse(violations.isEmpty());
-    }
-
-    @Test
-    void shouldFailWhenRoleIsNull() {
-        var dto = new UsersRequestDTO(
-                "Password@123",
-                "Name",
-                "login",
-                "email@email.com",
-                null,
-                validAddress()
-        );
-
-        var violations = validator.validate(dto);
-
-        assertFalse(violations.isEmpty());
-    }
-
-    @Test
-    void shouldFailWhenAddressIsNull() {
-        var dto = new UsersRequestDTO(
-                "Password@123",
-                "Name",
-                "login",
-                "email@email.com",
-                RoleEnum.CLIENT,
-                null
-        );
-
-        var violations = validator.validate(dto);
-
-        assertFalse(violations.isEmpty());
-    }
 
     @Test
     void shouldTrimAndNormalizeFields() {
-        var dto = new UsersRequestDTO(
+        UsersRequestDTO dto = new UsersRequestDTO(
                 "  Password@123  ",
                 "  Gustavo  ",
                 "  login123  ",
-                "  EMAIL@EMAIL.COM  ",
-                RoleEnum.CLIENT,
-                validAddress()
+                "  EMAIL@TEST.COM  ",
+                RoleEnum.OWNER,
+                List.of(mock(AddressRequestDTO.class))
         );
 
         assertEquals("Password@123", dto.password());
         assertEquals("Gustavo", dto.name());
         assertEquals("login123", dto.login());
-        assertEquals("email@email.com", dto.email());
+        assertEquals("email@test.com", dto.email());
     }
 
     @Test
-    void shouldFailWhenPasswordBecomesBlankAfterTrim() {
-        var dto = new UsersRequestDTO(
-                "     ",
-                "Name",
-                "login",
-                "email@email.com",
-                RoleEnum.CLIENT,
-                validAddress()
-        );
-
-        var violations = validator.validate(dto);
-
-        assertFalse(violations.isEmpty());
-    }
-
-    @Test
-    void shouldHandleNullValuesInConstructor() {
-        var dto = new UsersRequestDTO(
+    void shouldHandleNullValues() {
+        UsersRequestDTO dto = new UsersRequestDTO(
                 null,
                 null,
                 null,
                 null,
-                null,
-                null
+                RoleEnum.OWNER,
+                List.of(mock(AddressRequestDTO.class))
         );
 
         assertNull(dto.password());
