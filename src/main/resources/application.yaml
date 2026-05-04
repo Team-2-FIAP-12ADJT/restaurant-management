@@ -37,5 +37,8 @@ spring:
     problemdetails:
       enabled: true
 
+jwt:
+  secret: ${JWT_SECRET}
+
 server:
   port: 8080
