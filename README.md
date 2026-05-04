@@ -25,13 +25,17 @@ SPRING_DATASOURCE_USERNAME=postgres
 SPRING_DATASOURCE_PASSWORD=postgres
 SPRING_DATASOURCE_PORT=5432
 APP_PORT=8080
+JWT_SECRET=replace-with-base64-secret
+JWT_ACCESS_TOKEN_EXPIRATION_TIME=15
 ```
 
 Notas:
 
 - Em Docker Compose, `SPRING_DATASOURCE_URL` e sobrescrita para usar o hostname interno `db`.
 - A aplicacao esta configurada em `src/main/resources/application.yaml` para escutar na porta `8080`.
-- Mantenha `APP_PORT=8080`, a menos que `server.port` tambem seja alterado na configuracao da aplicacao.
+- `APP_PORT` controla a porta publicada no host; o container continua ouvindo em `8080`.
+- `JWT_SECRET` deve ser Base64. Gere um valor local com `openssl rand -base64 32` e nao commite segredos reais.
+- `JWT_ACCESS_TOKEN_EXPIRATION_TIME` e obrigatoria para inicializar a aplicacao.
 - O Liquibase roda na inicializacao da aplicacao usando `classpath:db/changelog/db.changelog-master.xml`.
 
 ## Execucao Local Com Docker
