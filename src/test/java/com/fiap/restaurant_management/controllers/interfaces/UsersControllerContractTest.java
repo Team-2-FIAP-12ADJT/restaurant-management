@@ -17,7 +17,7 @@ class UsersControllerContractTest {
                 com.fiap.restaurant_management.dtos.UsersUpdateRequestDTO.class));
         assertUserIdSchema(UsersControllerContract.class.getMethod("findById", UUID.class));
         assertUserIdSchema(UsersControllerContract.class.getMethod("delete", UUID.class));
-        assertUserIdSchema(UsersControllerContract.class.getMethod("updatePassWord", UUID.class,
+        assertUserIdSchema(UsersControllerContract.class.getMethod("updatePassword", UUID.class,
                 com.fiap.restaurant_management.dtos.UsersUpdatePasswordRequestDTO.class));
     }
 

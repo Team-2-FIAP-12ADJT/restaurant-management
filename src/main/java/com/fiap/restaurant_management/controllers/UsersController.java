@@ -5,6 +5,7 @@ import com.fiap.restaurant_management.dtos.*;
 import com.fiap.restaurant_management.services.interfaces.UsersServiceContract;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -12,6 +13,8 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
 
 import io.swagger.v3.oas.annotations.Parameter;
 import org.springframework.web.bind.annotation.*;
@@ -54,16 +57,15 @@ public class UsersController implements UsersControllerContract {
     }
 
     @Override
-    @PreAuthorize("hasRole('OWNER') or @userSecurity.isSelf(#userId, authentication)")
-    public ResponseEntity<UsersResponseDTO> update(
-            @PathVariable UUID userId,
-            @Valid @RequestBody UsersUpdateRequestDTO updateRequestDTO) {
-        log.info("Updating user with id: {}", userId);
-        return ResponseEntity.ok(this.usersService.update(userId, updateRequestDTO));
+    @PreAuthorize("hasAnyRole('OWNER', 'CLIENT')")
+    public ResponseEntity<UsersResponseDTO> me(@AuthenticationPrincipal Jwt jwt) {
+        UUID userId = UUID.fromString(jwt.getSubject());
+        log.info("Finding user with id: {}", userId);
+        return ResponseEntity.ok(this.usersService.findById(userId));
     }
 
     @Override
-    @PreAuthorize("hasRole('OWNER') or @userSecurity.isSelf(#userId, authentication)")
+    @PreAuthorize("hasRole('OWNER')")
     public ResponseEntity<UsersResponseDTO> findById(@PathVariable UUID userId) {
         log.info("Finding user with id: {}", userId);
         return ResponseEntity.ok(this.usersService.findById(userId));
@@ -79,7 +81,16 @@ public class UsersController implements UsersControllerContract {
 
     @Override
     @PreAuthorize("hasRole('OWNER') or @userSecurity.isSelf(#userId, authentication)")
-    public ResponseEntity<Void> updatePassWord(
+    public ResponseEntity<UsersResponseDTO> update(
+            @PathVariable UUID userId,
+            @Valid @RequestBody UsersUpdateRequestDTO updateRequestDTO) {
+        log.info("Updating user with id: {}", userId);
+        return ResponseEntity.ok(this.usersService.update(userId, updateRequestDTO));
+    }
+
+    @Override
+    @PreAuthorize("hasRole('OWNER') or @userSecurity.isSelf(#userId, authentication)")
+    public ResponseEntity<Void> updatePassword(
             @PathVariable UUID userId,
             @Valid @RequestBody UsersUpdatePasswordRequestDTO usersUpdatePasswordRequestDTO) {
         log.info("Update Pasword user with id: {}", userId);
