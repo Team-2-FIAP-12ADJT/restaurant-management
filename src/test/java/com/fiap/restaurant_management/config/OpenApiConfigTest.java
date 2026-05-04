@@ -56,6 +56,10 @@ class OpenApiConfigTest {
                                 .andExpect(status().isOk())
                                 .andExpect(jsonPath("$.info.title").value("Restaurant Management API"))
                                 .andExpect(jsonPath("$.info.version").value("v1"))
+                                .andExpect(jsonPath("$.components.securitySchemes.jwt_auth.type").value("http"))
+                                .andExpect(jsonPath("$.components.securitySchemes.jwt_auth.scheme").value("bearer"))
+                                .andExpect(jsonPath("$.components.securitySchemes.jwt_auth.bearerFormat").value("JWT"))
+                                .andExpect(jsonPath("$.security[0].jwt_auth").isArray())
                                 .andExpect(jsonPath("$.paths['" + ApiPaths.V1_AUTH_LOGIN + "']").value(notNullValue()))
                                 .andExpect(jsonPath("$.paths['" + ApiPaths.V1_USERS + "']").value(notNullValue()));
         }
