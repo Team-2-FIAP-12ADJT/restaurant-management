@@ -33,7 +33,8 @@ public interface UsersControllerContract {
         @ApiResponses(value = {
                         @ApiResponse(responseCode = "201", description = "Usuário criado com sucesso", content = @Content(mediaType = "application/json", schema = @Schema(implementation = UsersResponseDTO.class))),
                         @ApiResponse(responseCode = "400", description = "Dados inválidos", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ValidationErrorResponseDTO.class))),
-                        @ApiResponse(responseCode = "409", description = "Login ou e-mail já cadastrado", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ResourceErrorResponseDTO.class)))
+                        @ApiResponse(responseCode = "409", description = "Login ou e-mail já cadastrado", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ResourceErrorResponseDTO.class))),
+                        @ApiResponse(responseCode = "403", description = "Acesso negado", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ResourceErrorResponseDTO.class)))
         })
         @PostMapping
         ResponseEntity<UsersResponseDTO> create(
@@ -46,7 +47,10 @@ public interface UsersControllerContract {
                         @Parameter(in = ParameterIn.QUERY, name = "sort", description = "Ordenação no formato `campo,direcao`", schema = @Schema(type = "string", defaultValue = "createdAt,asc"), example = "createdAt,asc")
         })
         @ApiResponses(value = {
-                        @ApiResponse(responseCode = "200", description = "Lista retornada com sucesso", content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = UsersResponseDTO.class))))
+                        @ApiResponse(responseCode = "200", description = "Lista retornada com sucesso", content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = UsersResponseDTO.class)))),
+                        @ApiResponse(responseCode = "403", description = "Acesso negado", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ResourceErrorResponseDTO.class))),
+                        @ApiResponse(responseCode = "400", description = "Parâmetros de consulta inválidos", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ResourceErrorResponseDTO.class))),
+                        @ApiResponse(responseCode = "401", description = "Não autenticado", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ResourceErrorResponseDTO.class)))
         })
         @GetMapping
         ResponseEntity<PageResponseDTO<UsersResponseDTO>> findUsers(
@@ -58,7 +62,6 @@ public interface UsersControllerContract {
         @ApiResponses(value = {
                         @ApiResponse(responseCode = "200", description = "Usuário encontrado com sucesso", content = @Content(mediaType = "application/json", schema = @Schema(implementation = UsersResponseDTO.class))),
                         @ApiResponse(responseCode = "401", description = "Não autenticado", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ResourceErrorResponseDTO.class))),
-                        @ApiResponse(responseCode = "403", description = "Acesso negado", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ResourceErrorResponseDTO.class)))
         })
         @GetMapping("/me")
         ResponseEntity<UsersResponseDTO> me(
@@ -69,7 +72,9 @@ public interface UsersControllerContract {
         })
         @ApiResponses(value = {
                         @ApiResponse(responseCode = "200", description = "Usuário encontrado com sucesso", content = @Content(mediaType = "application/json", schema = @Schema(implementation = UsersResponseDTO.class))),
-                        @ApiResponse(responseCode = "404", description = "Usuário não encontrado", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ResourceErrorResponseDTO.class)))
+                        @ApiResponse(responseCode = "404", description = "Usuário não encontrado", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ResourceErrorResponseDTO.class))),
+                        @ApiResponse(responseCode = "403", description = "Acesso negado", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ResourceErrorResponseDTO.class))),
+                        @ApiResponse(responseCode = "401", description = "Não autenticado", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ResourceErrorResponseDTO.class)))
         })
         @GetMapping("/{userId}")
         ResponseEntity<UsersResponseDTO> findById(
@@ -80,7 +85,9 @@ public interface UsersControllerContract {
         })
         @ApiResponses(value = {
                         @ApiResponse(responseCode = "204", description = "Usuário excluído com sucesso"),
-                        @ApiResponse(responseCode = "404", description = "Usuário não encontrado", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ResourceErrorResponseDTO.class)))
+                        @ApiResponse(responseCode = "404", description = "Usuário não encontrado", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ResourceErrorResponseDTO.class))),
+                        @ApiResponse(responseCode = "403", description = "Acesso negado", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ResourceErrorResponseDTO.class))),
+                        @ApiResponse(responseCode = "401", description = "Não autenticado", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ResourceErrorResponseDTO.class)))
         })
         @DeleteMapping("/{userId}")
         ResponseEntity<Void> delete(
@@ -93,6 +100,8 @@ public interface UsersControllerContract {
                         @ApiResponse(responseCode = "200", description = "Usuário atualizado com sucesso", content = @Content(mediaType = "application/json", schema = @Schema(implementation = UsersResponseDTO.class))),
                         @ApiResponse(responseCode = "400", description = "Dados inválidos", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ValidationErrorResponseDTO.class))),
                         @ApiResponse(responseCode = "404", description = "Usuário não encontrado", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ResourceErrorResponseDTO.class))),
+                        @ApiResponse(responseCode = "403", description = "Acesso negado", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ResourceErrorResponseDTO.class))),
+                        @ApiResponse(responseCode = "401", description = "Não autenticado", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ResourceErrorResponseDTO.class))),
                         @ApiResponse(responseCode = "409", description = "Login ou e-mail já cadastrado", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ResourceErrorResponseDTO.class)))
         })
         @PatchMapping("/{userId}")
@@ -106,7 +115,9 @@ public interface UsersControllerContract {
         @ApiResponses(value = {
                         @ApiResponse(responseCode = "204", description = "Senha atualizada com sucesso"),
                         @ApiResponse(responseCode = "400", description = "Senha antiga incorreta ou nova senha igual à anterior", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ResourceErrorResponseDTO.class))),
-                        @ApiResponse(responseCode = "404", description = "Usuário não encontrado", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ResourceErrorResponseDTO.class)))
+                        @ApiResponse(responseCode = "404", description = "Usuário não encontrado", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ResourceErrorResponseDTO.class))),
+                        @ApiResponse(responseCode = "403", description = "Acesso negado", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ResourceErrorResponseDTO.class))),
+                        @ApiResponse(responseCode = "401", description = "Não autenticado", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ResourceErrorResponseDTO.class)))
         })
         @PatchMapping("/{userId}/password")
         ResponseEntity<Void> updatePassword(
