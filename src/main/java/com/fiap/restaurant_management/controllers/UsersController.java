@@ -11,6 +11,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+
 import io.swagger.v3.oas.annotations.Parameter;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,11 +30,13 @@ public class UsersController implements UsersControllerContract {
     }
 
     @Override
+    @PreAuthorize("hasRole('OWNER')")
     public ResponseEntity<UsersResponseDTO> create(@Valid @RequestBody UsersRequestDTO usersRequestDTO) {
         return ResponseEntity.status(HttpStatus.CREATED).body(this.usersService.create(usersRequestDTO));
     }
 
     @Override
+    @PreAuthorize("hasRole('OWNER')")
     public ResponseEntity<PageResponseDTO<UsersResponseDTO>> findUsers(
             UsersFilterDTO filter,
             @Parameter(hidden = true) @PageableDefault(sort = "createdAt", direction = Sort.Direction.ASC) Pageable pageable) {
@@ -50,6 +54,7 @@ public class UsersController implements UsersControllerContract {
     }
 
     @Override
+    @PreAuthorize("hasRole('OWNER') or @userSecurity.isSelf(#userId, authentication)")
     public ResponseEntity<UsersResponseDTO> update(
             @PathVariable UUID userId,
             @Valid @RequestBody UsersUpdateRequestDTO updateRequestDTO) {
@@ -58,12 +63,14 @@ public class UsersController implements UsersControllerContract {
     }
 
     @Override
+    @PreAuthorize("hasRole('OWNER') or @userSecurity.isSelf(#userId, authentication)")
     public ResponseEntity<UsersResponseDTO> findById(@PathVariable UUID userId) {
         log.info("Finding user with id: {}", userId);
         return ResponseEntity.ok(this.usersService.findById(userId));
     }
 
     @Override
+    @PreAuthorize("hasRole('OWNER')")
     public ResponseEntity<Void> delete(@PathVariable UUID userId) {
         log.info("Deleting user with id: {}", userId);
         this.usersService.delete(userId);
@@ -71,6 +78,7 @@ public class UsersController implements UsersControllerContract {
     }
 
     @Override
+    @PreAuthorize("hasRole('OWNER') or @userSecurity.isSelf(#userId, authentication)")
     public ResponseEntity<Void> updatePassWord(
             @PathVariable UUID userId,
             @Valid @RequestBody UsersUpdatePasswordRequestDTO usersUpdatePasswordRequestDTO) {

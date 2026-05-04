@@ -11,6 +11,8 @@ public final class ApiPaths {
 
     public static final String V1_USERS = V1 + "/users";
     public static final String V1_AUTH = V1 + "/auth";
+
+    public static final String V1_AUTH_REGISTER = V1_AUTH + "/register";
     public static final String V1_AUTH_LOGIN = V1_AUTH + "/login";
 
 }
