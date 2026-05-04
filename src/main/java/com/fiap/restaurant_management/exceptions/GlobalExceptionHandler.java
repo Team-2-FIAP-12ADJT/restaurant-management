@@ -9,10 +9,13 @@ import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.web.method.annotation.HandlerMethodValidationException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.validation.FieldError;
 import java.util.HashMap;
+
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Map;
@@ -60,6 +63,20 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
         problemDetail.setProperty("errors", fieldErrors);
         return handleExceptionInternal(ex, problemDetail, headers, status, request);
+    }
+
+    @ExceptionHandler(AuthorizationDeniedException.class)
+    public ProblemDetail handleAuthorizationDeniedException(AuthorizationDeniedException ex, HttpServletRequest request) {
+        log.warn("Acesso negado: {}", ex.getMessage());
+
+        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.FORBIDDEN,
+                "You can only access or modify your own user resource, unless you have OWNER role.");
+
+        problemDetail.setTitle("Forbidden");
+        problemDetail.setInstance(URI.create(request.getRequestURI()));
+        problemDetail.setType(URI.create("https://api.restaurant-management.com/errors/forbidden"));
+
+        return problemDetail;
     }
 
     @ExceptionHandler(Exception.class)

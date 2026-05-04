@@ -2,6 +2,7 @@ package com.fiap.restaurant_management.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -39,6 +40,9 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(PUBLIC_ROUTES).permitAll()
+                        .requestMatchers(HttpMethod.GET, ApiPaths.V1_USERS).hasRole("OWNER")
+                        .requestMatchers(HttpMethod.POST, ApiPaths.V1_USERS).hasRole("OWNER")
+                        .requestMatchers(HttpMethod.DELETE, ApiPaths.V1_USERS + "/*").hasRole("OWNER")
                         .anyRequest().authenticated())
                 .oauth2ResourceServer(oauth2 -> oauth2
                         .authenticationEntryPoint(restAuthenticationEntryPoint)
