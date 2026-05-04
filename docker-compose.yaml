@@ -18,7 +18,7 @@ services:
     depends_on:
       - db
     ports:
-      - "${APP_PORT}:8080"
+      - "${APP_PORT}:${APP_PORT}"
       - "127.0.0.1:5005:5005"
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/${SPRING_DATASOURCE_DATABASE}
@@ -27,8 +27,6 @@ services:
       SPRING_DATASOURCE_PORT: ${SPRING_DATASOURCE_PORT}
       SPRING_DATASOURCE_DATABASE: ${SPRING_DATASOURCE_DATABASE}
       SPRING_PROFILES_ACTIVE: dev
-      JWT_SECRET: ${JWT_SECRET}
-      JWT_ACCESS_TOKEN_EXPIRATION_TIME: ${JWT_ACCESS_TOKEN_EXPIRATION_TIME}
       APP_PORT: ${APP_PORT}
     volumes:
       - .:/app:delegated # Espelha código fonte
