@@ -19,10 +19,13 @@ import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import org.springframework.security.test.context.support.WithMockUser;
 
 @WebMvcTest(UsersController.class)
+@WithMockUser(roles = "OWNER")
 class UsersControllerTest {
 
     @Autowired
@@ -42,6 +45,7 @@ class UsersControllerTest {
         when(usersService.create(any())).thenReturn(response);
 
         mockMvc.perform(post(ApiPaths.V1_USERS)
+                        .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isCreated());
@@ -54,6 +58,7 @@ class UsersControllerTest {
         UsersRequestDTO request = buildInvalidUsersRequestDTO();
 
         mockMvc.perform(post(ApiPaths.V1_USERS)
+                        .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isBadRequest());
@@ -89,6 +94,7 @@ class UsersControllerTest {
         when(usersService.update(eq(userId), any())).thenReturn(response);
 
         mockMvc.perform(patch(ApiPaths.V1_USERS + "/{userId}", userId)
+                        .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk());
@@ -103,6 +109,7 @@ class UsersControllerTest {
         UsersUpdateRequestDTO request = buildInvClientUpdateReques();
 
         mockMvc.perform(patch(ApiPaths.V1_USERS + "/{userId}", userId)
+                        .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isBadRequest());
@@ -125,7 +132,8 @@ class UsersControllerTest {
     void shouldDeleteUserSuccessfully() throws Exception {
         UUID userId = UUID.randomUUID();
 
-        mockMvc.perform(delete(ApiPaths.V1_USERS + "/{userId}", userId))
+        mockMvc.perform(delete(ApiPaths.V1_USERS + "/{userId}", userId)
+                        .with(csrf()))
                 .andExpect(status().isNoContent());
 
         verify(usersService).delete(userId);
@@ -139,6 +147,7 @@ class UsersControllerTest {
                 new UsersUpdatePasswordRequestDTO("Old@1234", "New@1234");
 
         mockMvc.perform(patch( ApiPaths.V1_USERS + "/{userId}/password", userId)
+                        .with(csrf())
                         .contentType("application/json")
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isNoContent());
@@ -226,8 +235,7 @@ class UsersControllerTest {
         return new UsersUpdateRequestDTO(
                 "Gustavo",
                 "",
-                "gustavo@email.com",
-                RoleEnum.CLIENT
+                "gustavo@email.com"
         );
     }
 }

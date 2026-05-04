@@ -12,6 +12,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.*;
 import org.springframework.data.domain.*;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.*;
@@ -27,6 +28,9 @@ class UsersServiceTest {
 
     @Mock
     private UsersMapper mapper;
+
+    @Mock
+    private PasswordEncoder passwordEncoder;
 
     @InjectMocks
     private UsersService service;
@@ -51,11 +55,13 @@ class UsersServiceTest {
 
         when(dto.login()).thenReturn("gustavo");
         when(dto.email()).thenReturn("email@test.com");
+        when(dto.password()).thenReturn("raw-password");
 
         when(repository.existsByLoginIgnoreCase("gustavo")).thenReturn(false);
         when(repository.existsByEmailIgnoreCase("email@test.com")).thenReturn(false);
 
         when(mapper.toEntity(dto)).thenReturn(user);
+        when(passwordEncoder.encode("raw-password")).thenReturn("hashed-password");
         when(repository.save(user)).thenReturn(user);
         when(mapper.toResponseDTO(user)).thenReturn(mock(UsersResponseDTO.class));
 
@@ -176,6 +182,9 @@ class UsersServiceTest {
 
         when(repository.findByIdAndDeletedAtIsNull(userId))
                 .thenReturn(Optional.of(user));
+        when(passwordEncoder.matches("123", "123")).thenReturn(true);
+        when(passwordEncoder.matches("456", "123")).thenReturn(false);
+        when(passwordEncoder.encode("456")).thenReturn("hashed-456");
 
         service.updatePassword(userId, dto);
 
@@ -191,6 +200,7 @@ class UsersServiceTest {
 
         when(repository.findByIdAndDeletedAtIsNull(userId))
                 .thenReturn(Optional.of(user));
+        when(passwordEncoder.matches("errada", "123")).thenReturn(false);
 
         assertThrows(PasswordUpdateException.class,
                 () -> service.updatePassword(userId, dto));
@@ -207,6 +217,7 @@ class UsersServiceTest {
 
         when(repository.findByIdAndDeletedAtIsNull(userId))
                 .thenReturn(Optional.of(user));
+        when(passwordEncoder.matches("123", "123")).thenReturn(true);
 
         assertThrows(PasswordUpdateException.class,
                 () -> service.updatePassword(userId, dto));

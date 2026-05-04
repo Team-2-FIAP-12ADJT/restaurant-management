@@ -8,6 +8,7 @@ import com.fiap.restaurant_management.services.interfaces.UsersServiceContract;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
 import org.springframework.context.annotation.Import;
 import org.springdoc.core.configuration.SpringDocConfiguration;
@@ -28,6 +29,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
                 AuthController.class,
                 UsersController.class
 })
+@AutoConfigureMockMvc(addFilters = false)
 @Import(OpenApiConfig.class)
 @ImportAutoConfiguration({
                 SpringDocConfiguration.class,
