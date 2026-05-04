@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import com.fiap.restaurant_management.dtos.UsersLoginResponseDTO;
 import com.fiap.restaurant_management.entities.Users;
+import org.springframework.beans.factory.annotation.Value;
 
 import lombok.RequiredArgsConstructor;
 
@@ -23,9 +24,12 @@ import lombok.RequiredArgsConstructor;
 public class TokenService {
     private final JwtEncoder jwtEncoder;
 
+    @Value("${jwt.access-token-expiration-time}")
+    private long accessTokenExpirationTime; // in minutes
+
     public UsersLoginResponseDTO generateToken(Users user) {
         Instant now = Instant.now();
-        Instant expiresAt = now.plus(15, ChronoUnit.MINUTES); // Token válido por 15 minutos
+        Instant expiresAt = now.plus(accessTokenExpirationTime, ChronoUnit.MINUTES); // Token válido por 15 minutos
 
         JwtClaimsSet claims = JwtClaimsSet.builder()
                 .subject(user.getId().toString())
