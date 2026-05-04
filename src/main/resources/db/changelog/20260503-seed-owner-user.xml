@@ -1,0 +1,36 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="20260503-001-seed-owner-user" author="ricardolima">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(*)
+                FROM users
+                WHERE login = 'owner'
+                   OR email = 'owner@restaurant-management.local'
+            </sqlCheck>
+        </preConditions>
+
+        <insert tableName="users">
+            <column name="id" value="c6f2a66e-bf54-4f1a-9e7e-4fa17e3a30a2"/>
+            <column name="name" value="System Owner"/>
+            <column name="login" value="owner"/>
+            <column name="email" value="owner@restaurant-management.local"/>
+            <column name="password" value="$2y$10$o7zgsUSyRbF3EogmG2WNbuhPNLTgHVJJmCrd0bUz.dFy8I5/tJSsW"/>
+            <column name="role" valueNumeric="1"/>
+            <column name="created_at" valueDate="2026-05-03T00:00:00"/>
+            <column name="updated_at" valueDate="2026-05-03T00:00:00"/>
+        </insert>
+
+        <rollback>
+            <delete tableName="users">
+                <where>id = 'c6f2a66e-bf54-4f1a-9e7e-4fa17e3a30a2'</where>
+            </delete>
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>

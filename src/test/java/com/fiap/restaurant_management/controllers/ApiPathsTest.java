@@ -14,6 +14,7 @@ class ApiPathsTest {
         assertEquals("/api", ApiPaths.API_BASE);
         assertEquals("/api/v1", ApiPaths.V1);
         assertEquals("/api/v1/users", ApiPaths.V1_USERS);
+        assertEquals("/api/v1/users/me", ApiPaths.V1_USERS_ME);
         assertEquals("/api/v1/auth", ApiPaths.V1_AUTH);
         assertEquals("/api/v1/auth/login", ApiPaths.V1_AUTH_LOGIN);
     }

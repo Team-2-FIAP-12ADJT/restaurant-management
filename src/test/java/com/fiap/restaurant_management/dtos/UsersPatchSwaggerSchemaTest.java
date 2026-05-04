@@ -17,7 +17,6 @@ class UsersPatchSwaggerSchemaTest {
         assertSchemaExample(UsersUpdateRequestDTO.class, "name", "Gustavo");
         assertSchemaExample(UsersUpdateRequestDTO.class, "login", "gustavo123");
         assertSchemaExample(UsersUpdateRequestDTO.class, "email", "gustavo@email.com");
-        assertSchemaExample(UsersUpdateRequestDTO.class, "role", "2");
     }
 
     @Test

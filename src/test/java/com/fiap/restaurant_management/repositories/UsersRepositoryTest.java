@@ -112,10 +112,9 @@ class UsersRepositoryTest extends PostgreSQLIntegrationTestSupport {
         assertEquals(0, page.getTotalElements());
     }
 
-    //quando for testar ajustar linha 129, para o total de usuários no banco
     @Test
     void shouldReturnOnlyActiveUsers() {
-        createUser("Ativo", "ativo", "ativo@email.com");
+        Users active = createUser("Ativo", "ativo", "ativo@email.com");
 
         Users deleted = createUser("Deletado", "del", "del@email.com");
         deleted.softDelete();
@@ -125,7 +124,7 @@ class UsersRepositoryTest extends PostgreSQLIntegrationTestSupport {
                 PageRequest.of(0, 10)
         );
 
-        assertEquals(1, page.getTotalElements());
-        assertEquals("Ativo", page.getContent().getFirst().getName());
+        assertTrue(page.getContent().stream().anyMatch(user -> user.getId().equals(active.getId())));
+        assertFalse(page.getContent().stream().anyMatch(user -> user.getId().equals(deleted.getId())));
     }
 }

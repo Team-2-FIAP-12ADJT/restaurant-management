@@ -8,6 +8,7 @@ import com.fiap.restaurant_management.services.interfaces.UsersServiceContract;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
 import org.springframework.context.annotation.Import;
 import org.springdoc.core.configuration.SpringDocConfiguration;
@@ -28,6 +29,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
                 AuthController.class,
                 UsersController.class
 })
+@AutoConfigureMockMvc(addFilters = false)
 @Import(OpenApiConfig.class)
 @ImportAutoConfiguration({
                 SpringDocConfiguration.class,
@@ -54,6 +56,10 @@ class OpenApiConfigTest {
                                 .andExpect(status().isOk())
                                 .andExpect(jsonPath("$.info.title").value("Restaurant Management API"))
                                 .andExpect(jsonPath("$.info.version").value("v1"))
+                                .andExpect(jsonPath("$.components.securitySchemes.jwt_auth.type").value("http"))
+                                .andExpect(jsonPath("$.components.securitySchemes.jwt_auth.scheme").value("bearer"))
+                                .andExpect(jsonPath("$.components.securitySchemes.jwt_auth.bearerFormat").value("JWT"))
+                                .andExpect(jsonPath("$.security[0].jwt_auth").isArray())
                                 .andExpect(jsonPath("$.paths['" + ApiPaths.V1_AUTH_LOGIN + "']").value(notNullValue()))
                                 .andExpect(jsonPath("$.paths['" + ApiPaths.V1_USERS + "']").value(notNullValue()));
         }

@@ -10,7 +10,14 @@ public final class ApiPaths {
     public static final String V1 = API_BASE + "/v1";
 
     public static final String V1_USERS = V1 + "/users";
+    public static final String V1_USERS_ME = V1_USERS + "/me";
+
+    public static final String V1_ADDRESS = V1 + "/address";
+
     public static final String V1_AUTH = V1 + "/auth";
+    public static final String V1_AUTH_REGISTER = V1_AUTH + "/register";
     public static final String V1_AUTH_LOGIN = V1_AUTH + "/login";
+    public static final String V1_AUTH_LOGOUT = V1_AUTH + "/logout";
+    public static final String V1_AUTH_REFRESH = V1_AUTH + "/refresh";
 
 }

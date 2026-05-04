@@ -1,6 +1,5 @@
 package com.fiap.restaurant_management.dtos;
 
-import com.fiap.restaurant_management.enums.RoleEnum;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
 import jakarta.validation.ValidatorFactory;
@@ -24,8 +23,7 @@ class UsersUpdateRequestTest {
         var dto = new UsersUpdateRequestDTO(
                 "Gustavo",
                 "gustavo123",
-                "gustavo@email.com",
-                RoleEnum.CLIENT
+                "gustavo@email.com"
         );
 
         var violations = validator.validate(dto);
@@ -36,7 +34,6 @@ class UsersUpdateRequestTest {
     @Test
     void shouldPassWhenAllFieldsAreNull() {
         var dto = new UsersUpdateRequestDTO(
-                null,
                 null,
                 null,
                 null
@@ -52,8 +49,7 @@ class UsersUpdateRequestTest {
         var dto = new UsersUpdateRequestDTO(
                 "",
                 "login123",
-                "email@email.com",
-                RoleEnum.CLIENT
+                "email@email.com"
         );
 
         var violations = validator.validate(dto);
@@ -66,8 +62,7 @@ class UsersUpdateRequestTest {
         var dto = new UsersUpdateRequestDTO(
                 "Name",
                 "",
-                "email@email.com",
-                RoleEnum.CLIENT
+                "email@email.com"
         );
 
         var violations = validator.validate(dto);
@@ -80,8 +75,7 @@ class UsersUpdateRequestTest {
         var dto = new UsersUpdateRequestDTO(
                 "Name",
                 "login123",
-                "invalid-email",
-                RoleEnum.CLIENT
+                "invalid-email"
         );
 
         var violations = validator.validate(dto);
@@ -94,8 +88,7 @@ class UsersUpdateRequestTest {
         var dto = new UsersUpdateRequestDTO(
                 "Name",
                 "login123",
-                null,
-                RoleEnum.CLIENT
+                null
         );
 
         var violations = validator.validate(dto);
@@ -108,8 +101,7 @@ class UsersUpdateRequestTest {
         var dto = new UsersUpdateRequestDTO(
                 "  Gustavo  ",
                 "login123",
-                "email@email.com",
-                RoleEnum.CLIENT
+                "email@email.com"
         );
 
         assertEquals("Gustavo", dto.name());
@@ -120,8 +112,7 @@ class UsersUpdateRequestTest {
         var dto = new UsersUpdateRequestDTO(
                 "Name",
                 "  login123  ",
-                "email@email.com",
-                RoleEnum.CLIENT
+                "email@email.com"
         );
 
         assertEquals("login123", dto.login());
@@ -132,8 +123,7 @@ class UsersUpdateRequestTest {
         var dto = new UsersUpdateRequestDTO(
                 "Name",
                 "login123",
-                "  email@email.com  ",
-                RoleEnum.CLIENT
+                "  email@email.com  "
         );
 
         assertEquals("email@email.com", dto.email());
@@ -144,8 +134,7 @@ class UsersUpdateRequestTest {
         var dto = new UsersUpdateRequestDTO(
                 "   ",
                 "login123",
-                "email@email.com",
-                RoleEnum.CLIENT
+                "email@email.com"
         );
 
         var violations = validator.validate(dto);
@@ -158,8 +147,7 @@ class UsersUpdateRequestTest {
         var dto = new UsersUpdateRequestDTO(
                 "Name",
                 "   ",
-                "email@email.com",
-                RoleEnum.CLIENT
+                "email@email.com"
         );
 
         var violations = validator.validate(dto);

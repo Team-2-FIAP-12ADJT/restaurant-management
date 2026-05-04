@@ -4,6 +4,7 @@ import com.fiap.restaurant_management.dtos.*;
 import com.fiap.restaurant_management.entities.Address;
 import com.fiap.restaurant_management.entities.Users;
 import com.fiap.restaurant_management.enums.RoleEnum;
+import org.mapstruct.factory.Mappers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -20,7 +21,7 @@ class UsersMapperTest {
 
     @BeforeEach
     void setup() {
-        mapper = new UsersMapperImpl();
+        mapper = Mappers.getMapper(UsersMapper.class);
     }
 
     @Test
@@ -47,7 +48,7 @@ class UsersMapperTest {
         entity.setEmail("original@email.com");
 
         UsersUpdateRequestDTO dto = new UsersUpdateRequestDTO(
-                "Novo Nome", null, null,null
+                "Novo Nome", null, null
         );
 
         mapper.updateEntityFromDto(dto, entity);
@@ -65,7 +66,7 @@ class UsersMapperTest {
         entity.setPassword("senhaOriginal");
 
         UsersUpdateRequestDTO dto = new UsersUpdateRequestDTO(
-                "Nome", "novoLogin", "novo@email.com", RoleEnum.CLIENT
+                "Nome", "novoLogin", "novo@email.com"
         );
 
         mapper.updateEntityFromDto(dto, entity);
@@ -110,7 +111,7 @@ class UsersMapperTest {
 
     @Test
     void shouldReturnNullWhenToEntityReceivesNull() {
-        Users result = mapper.toEntity(null);
+        Users result = mapper.toEntity((UsersRequestDTO) null);
 
         assertNull(result);
     }
@@ -212,7 +213,6 @@ class UsersMapperTest {
         when(dto.name()).thenReturn(null);
         when(dto.login()).thenReturn(null);
         when(dto.email()).thenReturn(null);
-        when(dto.role()).thenReturn(null);
 
         mapper.updateEntityFromDto(dto, entity);
 
@@ -246,6 +246,54 @@ class UsersMapperTest {
         Users user = mapper.toEntity(dto);
 
         assertTrue(user.getAddresses() == null || user.getAddresses().isEmpty());
+    }
+
+    @Test
+    void shouldMapRegisterRequestAndBindAddress_whenAddressIsPresent() {
+        RegisterRequestDTO dto = new RegisterRequestDTO(
+                "Password@123",
+                "Gustavo",
+                "login123",
+                "email@test.com",
+                List.of(buildValidDTO())
+        );
+
+        Users user = mapper.toEntity(dto);
+
+        assertNotNull(user);
+        assertNull(user.getRole());
+        assertEquals("Gustavo", user.getName());
+        assertEquals("login123", user.getLogin());
+        assertEquals("email@test.com", user.getEmail());
+        assertEquals("Password@123", user.getPassword());
+        assertNotNull(user.getAddresses());
+        assertEquals(1, user.getAddresses().size());
+        assertEquals(user, user.getAddresses().getFirst().getUser());
+        assertEquals("Rua X", user.getAddresses().getFirst().getStreet());
+    }
+
+    @Test
+    void shouldMapRegisterRequestWithoutAddress() {
+        RegisterRequestDTO dto = new RegisterRequestDTO(
+                "Password@123",
+                "Gustavo",
+                "login123",
+                "email@test.com",
+                null
+        );
+
+        Users user = mapper.toEntity(dto);
+
+        assertNotNull(user);
+        assertEquals("Gustavo", user.getName());
+        assertTrue(user.getAddresses() == null || user.getAddresses().isEmpty());
+    }
+
+    @Test
+    void shouldReturnNullWhenRegisterRequestToEntityReceivesNull() {
+        Users result = mapper.toEntity((RegisterRequestDTO) null);
+
+        assertNull(result);
     }
 
     private AddressRequestDTO buildValidDTO() {

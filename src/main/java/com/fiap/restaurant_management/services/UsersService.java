@@ -18,6 +18,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Objects;
 import java.util.UUID;
@@ -28,10 +29,12 @@ public class UsersService implements UsersServiceContract {
 
     private final UsersRepository usersRepository;
     private final UsersMapper usersMapper;
+    private final PasswordEncoder passwordEncoder;
 
-    public UsersService(UsersRepository usersRepository, UsersMapper usersMapper) {
+    public UsersService(UsersRepository usersRepository, UsersMapper usersMapper, PasswordEncoder passwordEncoder) {
         this.usersRepository = Objects.requireNonNull(usersRepository);
         this.usersMapper = Objects.requireNonNull(usersMapper);
+        this.passwordEncoder = Objects.requireNonNull(passwordEncoder);
     }
 
     @Transactional
@@ -45,7 +48,12 @@ public class UsersService implements UsersServiceContract {
         }
 
         Users usersMapped = this.usersMapper.toEntity(usersRequestDTO);
+
+        String hashedPassword = this.hashPassword(usersRequestDTO.password());
+        usersMapped.setPassword(hashedPassword);
+
         Users user = this.usersRepository.save(Objects.requireNonNull(usersMapped, "Mapped user cannot be null"));
+
         log.info("User created with id: {}", user.getId());
         return this.usersMapper.toResponseDTO(user);
     }
@@ -103,17 +111,24 @@ public class UsersService implements UsersServiceContract {
     public void updatePassword(UUID userId, UsersUpdatePasswordRequestDTO usersUpdatePasswordRequestDTO) {
         Users user = this.usersRepository.findByIdAndDeletedAtIsNull(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User", userId));
+
         log.info("User found with id: {}", user.getId());
-        if (!user.matchesPassword(usersUpdatePasswordRequestDTO.oldPassword())) {
+
+        if (!passwordEncoder.matches(usersUpdatePasswordRequestDTO.oldPassword(), user.getPassword())) {
             throw new PasswordUpdateException(HttpStatus.BAD_REQUEST, "Old password is incorrect", userId);
         }
 
-        if (user.passwordEquals(usersUpdatePasswordRequestDTO.newPassword())) {
+        if (passwordEncoder.matches(usersUpdatePasswordRequestDTO.newPassword(), user.getPassword())) {
             throw new PasswordUpdateException(HttpStatus.CONFLICT,
                     "New password must be different from the old password", userId);
         }
-        user.setPassword(usersUpdatePasswordRequestDTO.newPassword());
+        String hashedPassword = this.hashPassword(usersUpdatePasswordRequestDTO.newPassword());
+        user.setPassword(hashedPassword);
         this.usersRepository.save(user);
+    }
+
+    private String hashPassword(String password) {
+        return this.passwordEncoder.encode(password);
     }
 
 }

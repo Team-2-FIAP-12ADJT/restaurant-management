@@ -16,6 +16,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.validation.annotation.Validated;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.web.bind.annotation.*;
@@ -51,19 +53,16 @@ public interface UsersControllerContract {
                         @ParameterObject UsersFilterDTO filter,
                         @Parameter(hidden = true) @PageableDefault(sort = "createdAt", direction = Sort.Direction.ASC) Pageable pageable);
 
-        @Operation(description = "Realiza a atualização dos dados do usuário", summary = "Atualização de usuário", parameters = {
-                        @Parameter(in = ParameterIn.PATH, name = "userId", description = "UUID do usuário", schema = @Schema(type = "string", format = "uuid"), example = "e5cb7e35-0d07-4183-97d7-1e851c3ec236")
+        @Operation(description = "Retorna o usuário logado", summary = "Busca do usuário logado", parameters = {
         })
         @ApiResponses(value = {
-                        @ApiResponse(responseCode = "200", description = "Usuário atualizado com sucesso", content = @Content(mediaType = "application/json", schema = @Schema(implementation = UsersResponseDTO.class))),
-                        @ApiResponse(responseCode = "400", description = "Dados inválidos", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ValidationErrorResponseDTO.class))),
-                        @ApiResponse(responseCode = "404", description = "Usuário não encontrado", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ResourceErrorResponseDTO.class))),
-                        @ApiResponse(responseCode = "409", description = "Login ou e-mail já cadastrado", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ResourceErrorResponseDTO.class)))
+                        @ApiResponse(responseCode = "200", description = "Usuário encontrado com sucesso", content = @Content(mediaType = "application/json", schema = @Schema(implementation = UsersResponseDTO.class))),
+                        @ApiResponse(responseCode = "401", description = "Não autenticado", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ResourceErrorResponseDTO.class))),
+                        @ApiResponse(responseCode = "403", description = "Acesso negado", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ResourceErrorResponseDTO.class)))
         })
-        @PatchMapping("/{userId}")
-        ResponseEntity<UsersResponseDTO> update(
-                        @PathVariable("userId") UUID userId,
-                        @Valid @org.springframework.web.bind.annotation.RequestBody UsersUpdateRequestDTO updateRequestDTO);
+        @GetMapping("/me")
+        ResponseEntity<UsersResponseDTO> me(
+                        @AuthenticationPrincipal Jwt jwt);
 
         @Operation(description = "Busca um usuário pelo seu UUID", summary = "Busca de usuário por ID", parameters = {
                         @Parameter(in = ParameterIn.PATH, name = "userId", description = "UUID do usuário", schema = @Schema(type = "string", format = "uuid"), example = "e5cb7e35-0d07-4183-97d7-1e851c3ec236")
@@ -87,6 +86,20 @@ public interface UsersControllerContract {
         ResponseEntity<Void> delete(
                         @PathVariable("userId") UUID userId);
 
+        @Operation(description = "Realiza a atualização dos dados do usuário", summary = "Atualização de usuário", parameters = {
+                        @Parameter(in = ParameterIn.PATH, name = "userId", description = "UUID do usuário", schema = @Schema(type = "string", format = "uuid"), example = "e5cb7e35-0d07-4183-97d7-1e851c3ec236")
+        })
+        @ApiResponses(value = {
+                        @ApiResponse(responseCode = "200", description = "Usuário atualizado com sucesso", content = @Content(mediaType = "application/json", schema = @Schema(implementation = UsersResponseDTO.class))),
+                        @ApiResponse(responseCode = "400", description = "Dados inválidos", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ValidationErrorResponseDTO.class))),
+                        @ApiResponse(responseCode = "404", description = "Usuário não encontrado", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ResourceErrorResponseDTO.class))),
+                        @ApiResponse(responseCode = "409", description = "Login ou e-mail já cadastrado", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ResourceErrorResponseDTO.class)))
+        })
+        @PatchMapping("/{userId}")
+        ResponseEntity<UsersResponseDTO> update(
+                        @PathVariable("userId") UUID userId,
+                        @Valid @org.springframework.web.bind.annotation.RequestBody UsersUpdateRequestDTO updateRequestDTO);
+
         @Operation(description = "Atualiza a senha do usuário", summary = "Atualização de senha", parameters = {
                         @Parameter(in = ParameterIn.PATH, name = "userId", description = "UUID do usuário", schema = @Schema(type = "string", format = "uuid"), example = "e5cb7e35-0d07-4183-97d7-1e851c3ec236")
         })
@@ -96,7 +109,7 @@ public interface UsersControllerContract {
                         @ApiResponse(responseCode = "404", description = "Usuário não encontrado", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ResourceErrorResponseDTO.class)))
         })
         @PatchMapping("/{userId}/password")
-        ResponseEntity<Void> updatePassWord(
+        ResponseEntity<Void> updatePassword(
                         @PathVariable("userId") UUID userId,
                         @Valid @org.springframework.web.bind.annotation.RequestBody UsersUpdatePasswordRequestDTO usersUpdatePasswordRequestDTO);
 }
