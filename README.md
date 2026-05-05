@@ -2,6 +2,23 @@
 
 API backend Spring Boot para gerenciamento de restaurante.
 
+## Credenciais do Seed
+
+O Liquibase cria automaticamente um usuario `OWNER` na primeira inicializacao:
+
+| Campo | Valor                               |
+| ----- | ----------------------------------- |
+| login | `owner`                             |
+| email | `owner@restaurant-management.local` |
+| senha | `Senh@1234`                         |
+| role  | `OWNER`                             |
+
+Use esse usuario para autenticar via `POST /api/v1/auth/login` e obter o JWT.
+
+## Documentacao
+
+A fonte canonica de documentacao fica em `docs/`.
+
 Este README cobre execucao local e deploy local usando Docker. O projeto possui arquivos separados para desenvolvimento e producao local:
 
 - `Dockerfile` + `docker-compose.yaml`: ambiente de desenvolvimento, com codigo montado como volume, Maven Wrapper e porta de debug.
@@ -134,12 +151,12 @@ docker compose -f docker-compose.prod.yaml down -v
 
 ## Diferencas Entre Os Arquivos Docker
 
-| Arquivo | Uso | Caracteristicas |
-| --- | --- | --- |
-| `Dockerfile` | Desenvolvimento | Usa JDK 21 Alpine, instala `bash`, monta o projeto via volume e executa `./mvnw spring-boot:run`. |
-| `Dockerfile.prod` | Producao local | Compila o projeto em uma etapa Maven e gera imagem final com JRE, `curl` e usuario nao-root. |
-| `docker-compose.yaml` | Desenvolvimento | Sobe Postgres e app, expoe `8080`, expoe debug em `127.0.0.1:5005`, monta o codigo local e cache Maven. |
-| `docker-compose.prod.yaml` | Producao local | Sobe Postgres e app usando `Dockerfile.prod`, sem volume de codigo e sem porta de debug. |
+| Arquivo                    | Uso             | Caracteristicas                                                                                         |
+| -------------------------- | --------------- | ------------------------------------------------------------------------------------------------------- |
+| `Dockerfile`               | Desenvolvimento | Usa JDK 21 Alpine, instala `bash`, monta o projeto via volume e executa `./mvnw spring-boot:run`.       |
+| `Dockerfile.prod`          | Producao local  | Compila o projeto em uma etapa Maven e gera imagem final com JRE, `curl` e usuario nao-root.            |
+| `docker-compose.yaml`      | Desenvolvimento | Sobe Postgres e app, expoe `8080`, expoe debug em `127.0.0.1:5005`, monta o codigo local e cache Maven. |
+| `docker-compose.prod.yaml` | Producao local  | Sobe Postgres e app usando `Dockerfile.prod`, sem volume de codigo e sem porta de debug.                |
 
 ## Execucao Sem Docker
 
