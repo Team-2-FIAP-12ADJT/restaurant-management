@@ -1,16 +1,16 @@
 {
   "info": {
-    "_postman_id": "86de111c-1c84-423e-b95e-17c26a64c384",
+    "_postman_id": "4340b94d-2f0a-4188-89c3-19599c280b65",
     "name": "restaurant_manager",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-    "_exporter_id": "22096535"
+    "_exporter_id": "53253997"
   },
   "item": [
     {
       "name": "Users",
       "item": [
         {
-          "name": "create user",
+          "name": "Create User",
           "request": {
             "auth": {
               "type": "bearer",
@@ -51,7 +51,7 @@
                 "header": [],
                 "body": {
                   "mode": "raw",
-                  "raw": "{\n    \"name\": \"{{$randomFullName}}\",\n    \"email\": \"Travon_Gerhold66@yahoo.com\",\n    \"password\": \"jhtc5zaNjnxy@\",\n    \"role\": 1,\n    \"login\": \"{{$randomUserName}}\",\n    \"address\": {\n        \"street\": \"{{$randomStreetName}}\",\n        \"number\": \"{{$randomAlphaNumeric}}\",\n        \"neighborhood\": \"{{$randomLoremWord}}\",\n        \"city\": \"{{$randomCity}}\",\n        \"state\": \"RJ\",\n        \"country\": \"{{$randomCountry}}\",\n        \"zipCode\": \"00000-000\"\n    }\n}",
+                  "raw": "{\n    \"name\": \"{{$randomFullName}}\",\n    \"email\": \"nedra.reinger@hotmail.com\",\n    \"password\": \"jhtc5zaNjnxy@\",\n    \"role\": 1,\n    \"login\": \"{{$randomUserName}}\",\n    \"address\": [\n        {\n            \"street\": \"{{$randomStreetName}}\",\n            \"number\": \"{{$randomAlphaNumeric}}\",\n            \"neighborhood\": \"{{$randomLoremWord}}\",\n            \"city\": \"{{$randomCity}}\",\n            \"state\": \"RJ\",\n            \"country\": \"{{$randomCountry}}\",\n            \"zipCode\": \"00000-000\"\n        }\n    ]\n}",
                   "options": {
                     "raw": {
                       "language": "json"
@@ -59,9 +59,9 @@
                   }
                 },
                 "url": {
-                  "raw": "{{baseUrl}}/users",
+                  "raw": "{{baseUrl}}{{version}}/users",
                   "host": [
-                    "{{baseUrl}}"
+                    "{{baseUrl}}{{version}}"
                   ],
                   "path": [
                     "users"
@@ -103,7 +103,7 @@
                 "header": [],
                 "body": {
                   "mode": "raw",
-                  "raw": "{\n    \"name\": \"{{$randomFullName}}\",\n    \"email\": \"{{$randomEmail}}\",\n    \"password\": \"jhtc5zaNjnxy@\",\n    \"role\": 1,\n    \"login\": \"{{$randomUserName}}\",\n    \"address\": {\n        \"street\": \"{{$randomStreetName}}\",\n        \"number\": \"{{$randomAlphaNumeric}}\",\n        \"neighborhood\": \"{{$randomLoremWord}}\",\n        \"city\": \"{{$randomCity}}\",\n        \"state\": \"RJ\",\n        \"country\": \"{{$randomCountry}}\",\n        \"zipCode\": \"00000-000\"\n    }\n}",
+                  "raw": "{\n    \"name\": \"{{$randomFullName}}\",\n    \"email\": \"{{$randomEmail}}\",\n    \"password\": \"jhtc5zaNjnxy@\",\n    \"role\": 1,\n    \"login\": \"{{$randomUserName}}\",\n    \"address\": [\n        {\n            \"street\": \"{{$randomStreetName}}\",\n            \"number\": \"{{$randomAlphaNumeric}}\",\n            \"neighborhood\": \"{{$randomLoremWord}}\",\n            \"city\": \"{{$randomCity}}\",\n            \"state\": \"RJ\",\n            \"country\": \"{{$randomCountry}}\",\n            \"zipCode\": \"00000-000\"\n        }\n    ]\n}",
                   "options": {
                     "raw": {
                       "language": "json"
@@ -111,9 +111,9 @@
                   }
                 },
                 "url": {
-                  "raw": "{{baseUrl}}/users",
+                  "raw": "{{baseUrl}}{{version}}/users",
                   "host": [
-                    "{{baseUrl}}"
+                    "{{baseUrl}}{{version}}"
                   ],
                   "path": [
                     "users"
@@ -122,8 +122,32 @@
               },
               "status": "Created",
               "code": 201,
-              "_postman_previewlanguage": "Text",
+              "_postman_previewlanguage": "json",
               "header": [
+                {
+                  "key": "X-Content-Type-Options",
+                  "value": "nosniff"
+                },
+                {
+                  "key": "X-XSS-Protection",
+                  "value": "0"
+                },
+                {
+                  "key": "Cache-Control",
+                  "value": "no-cache, no-store, max-age=0, must-revalidate"
+                },
+                {
+                  "key": "Pragma",
+                  "value": "no-cache"
+                },
+                {
+                  "key": "Expires",
+                  "value": "0"
+                },
+                {
+                  "key": "X-Frame-Options",
+                  "value": "DENY"
+                },
                 {
                   "key": "Content-Type",
                   "value": "application/json"
@@ -134,7 +158,7 @@
                 },
                 {
                   "key": "Date",
-                  "value": "Wed, 08 Apr 2026 00:45:42 GMT"
+                  "value": "Tue, 05 May 2026 00:46:36 GMT"
                 },
                 {
                   "key": "Keep-Alive",
@@ -146,16 +170,22 @@
                 }
               ],
               "cookie": [],
-              "body": "{\n    \"id\": \"859f26f6-5014-4417-9545-a3ce1b57c28c\",\n    \"name\": \"Kristopher Russel\",\n    \"email\": \"Alberto11@hotmail.com\",\n    \"login\": \"Brandi48\",\n    \"role\": \"Owner\",\n    \"addresses\": [\n        {\n            \"id\": \"e43dafc6-bd2d-42cd-b551-a911eb94d50b\",\n            \"street\": \"Leannon Center\",\n            \"number\": \"k\",\n            \"complement\": null,\n            \"neighborhood\": \"facere\",\n            \"city\": \"Wolfmouth\",\n            \"state\": \"RJ\",\n            \"zipCode\": \"00000-000\",\n            \"country\": \"Belgium\"\n        }\n    ]\n}"
+              "body": "{\n    \"id\": \"d71184eb-43f0-42f7-aab2-3ffacf509ba8\",\n    \"name\": \"Kristina Johns\",\n    \"email\": \"mireille.langworth@gmail.com\",\n    \"login\": \"Mariah_Jerde98\",\n    \"role\": \"Owner\",\n    \"addresses\": [\n        {\n            \"id\": \"5de5fc3b-b783-4103-b5da-6a9363bf8a06\",\n            \"street\": \"Ellie Pine\",\n            \"number\": \"j\",\n            \"complement\": null,\n            \"neighborhood\": \"in\",\n            \"city\": \"Hemet\",\n            \"state\": \"RJ\",\n            \"zipCode\": \"00000-000\",\n            \"country\": \"Armenia\"\n        }\n    ]\n}"
             },
             {
               "name": "400 Validation",
               "originalRequest": {
                 "method": "POST",
-                "header": [],
+                "header": [
+                  {
+                    "key": "",
+                    "value": "",
+                    "type": "text"
+                  }
+                ],
                 "body": {
                   "mode": "raw",
-                  "raw": "{\n    \"name\": \"{{$randomFullName}}\",\n    \"email\": \"{{$randomEmail}}\",\n    \"password\": \"jhtaNjnxy@\",\n    \"role\": 2,\n    \"login\": \"{{$randomUserName}}\",\n    \"address\": {\n        \"street\": \"{{$randomStreetName}}\",\n        \"number\": \"{{$randomAlphaNumeric}}\",\n        \"neighborhood\": \"{{$randomLoremWord}}\",\n        \"city\": \"{{$randomCity}}\",\n        \"state\": \"RJ\",\n        \"country\": \"{{$randomCountry}}\",\n        \"zipCode\": \"00000-000\"\n    }\n}",
+                  "raw": "{\n    \"name\": \"{{$randomFullName}}\",\n    \"email\": \"{{$randomEmail}}\",\n    \"password\": \"jhtaNjnxy@\",\n    \"role\": 2,\n    \"login\": \"{{$randomUserName}}\",\n    \"address\": [\n        {\n            \"street\": \"{{$randomStreetName}}\",\n            \"number\": \"{{$randomAlphaNumeric}}\",\n            \"neighborhood\": \"{{$randomLoremWord}}\",\n            \"city\": \"{{$randomCity}}\",\n            \"state\": \"RJ\",\n            \"country\": \"{{$randomCountry}}\",\n            \"zipCode\": \"00000-000\"\n        }\n    ]\n}",
                   "options": {
                     "raw": {
                       "language": "json"
@@ -163,9 +193,9 @@
                   }
                 },
                 "url": {
-                  "raw": "{{baseUrl}}/users",
+                  "raw": "{{baseUrl}}{{version}}/users",
                   "host": [
-                    "{{baseUrl}}"
+                    "{{baseUrl}}{{version}}"
                   ],
                   "path": [
                     "users"
@@ -200,7 +230,13 @@
               "name": "401 Unauthorized",
               "originalRequest": {
                 "method": "POST",
-                "header": [],
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "dsada",
+                    "type": "text"
+                  }
+                ],
                 "body": {
                   "mode": "raw",
                   "raw": "{\n    \"name\": \"{{$randomFullName}}\",\n    \"email\": \"{{$randomEmail}}\",\n    \"password\": \"JhtaNjnxy55@\",\n    \"role\": 2,\n    \"login\": \"{{$randomUserName}}\",\n    \"address\": [\n        {\n            \"street\": \"{{$randomStreetName}}\",\n            \"number\": \"{{$randomAlphaNumeric}}\",\n            \"neighborhood\": \"{{$randomLoremWord}}\",\n            \"city\": \"{{$randomCity}}\",\n            \"state\": \"RJ\",\n            \"country\": \"{{$randomCountry}}\",\n            \"zipCode\": \"00000-000\"\n        },\n        {\n            \"street\": \"{{$randomStreetName}}\",\n            \"number\": \"{{$randomAlphaNumeric}}\",\n            \"neighborhood\": \"{{$randomLoremWord}}\",\n            \"city\": \"{{$randomCity}}\",\n            \"state\": \"RJ\",\n            \"country\": \"{{$randomCountry}}\",\n            \"zipCode\": \"00000-000\"\n        }\n    ]\n}",
@@ -222,7 +258,7 @@
               },
               "status": "Unauthorized",
               "code": 401,
-              "_postman_previewlanguage": null,
+              "_postman_previewlanguage": "Text",
               "header": [
                 {
                   "key": "X-Content-Type-Options",
@@ -298,7 +334,7 @@
               },
               "status": "Forbidden",
               "code": 403,
-              "_postman_previewlanguage": null,
+              "_postman_previewlanguage": "Text",
               "header": [
                 {
                   "key": "X-Content-Type-Options",
@@ -392,9 +428,9 @@
                 "method": "GET",
                 "header": [],
                 "url": {
-                  "raw": "{{baseUrl}}/users/:id",
+                  "raw": "{{baseUrl}}{{version}}/users/:id",
                   "host": [
-                    "{{baseUrl}}"
+                    "{{baseUrl}}{{version}}"
                   ],
                   "path": [
                     "users",
@@ -426,9 +462,9 @@
                 "method": "GET",
                 "header": [],
                 "url": {
-                  "raw": "{{baseUrl}}/users/:id",
+                  "raw": "{{baseUrl}}{{version}}/users/:id",
                   "host": [
-                    "{{baseUrl}}"
+                    "{{baseUrl}}{{version}}"
                   ],
                   "path": [
                     "users",
@@ -476,9 +512,9 @@
                 "method": "GET",
                 "header": [],
                 "url": {
-                  "raw": "{{baseUrl}}/users/:id",
+                  "raw": "{{baseUrl}}{{version}}/users/:id",
                   "host": [
-                    "{{baseUrl}}"
+                    "{{baseUrl}}{{version}}"
                   ],
                   "path": [
                     "users",
@@ -520,7 +556,13 @@
               "name": "401 Unauthorized",
               "originalRequest": {
                 "method": "GET",
-                "header": [],
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "",
+                    "type": "text"
+                  }
+                ],
                 "url": {
                   "raw": "{{baseUrl}}{{version}}/users/:id",
                   "host": [
@@ -540,7 +582,7 @@
               },
               "status": "Unauthorized",
               "code": 401,
-              "_postman_previewlanguage": null,
+              "_postman_previewlanguage": "Text",
               "header": [
                 {
                   "key": "X-Content-Type-Options",
@@ -614,7 +656,7 @@
               },
               "status": "Forbidden",
               "code": 403,
-              "_postman_previewlanguage": null,
+              "_postman_previewlanguage": "Text",
               "header": [
                 {
                   "key": "X-Content-Type-Options",
@@ -667,7 +709,7 @@
           ]
         },
         {
-          "name": "delete user",
+          "name": "Delete User",
           "request": {
             "auth": {
               "type": "bearer",
@@ -693,21 +735,21 @@
               "variable": [
                 {
                   "key": ":uderId",
-                  "value": "d74e0b7e-d90b-4fb8-8e09-01b5d73f457e"
+                  "value": "98052eed-5945-4b0c-ba3b-11c3d57f85d8"
                 }
               ]
             }
           },
           "response": [
             {
-              "name": "200 OK - User Found",
+              "name": "204 OK - User Found",
               "originalRequest": {
                 "method": "DELETE",
                 "header": [],
                 "url": {
-                  "raw": "{{baseUrl}}/users/::uderId",
+                  "raw": "{{baseUrl}}{{version}}/users/::uderId",
                   "host": [
-                    "{{baseUrl}}"
+                    "{{baseUrl}}{{version}}"
                   ],
                   "path": [
                     "users",
@@ -716,7 +758,7 @@
                   "variable": [
                     {
                       "key": ":uderId",
-                      "value": "3102c816-82e0-4317-9760-033601c76a28"
+                      "value": "3102c816-82e0-4317-9760-033601c76a2"
                     }
                   ]
                 }
@@ -739,9 +781,9 @@
                 "method": "DELETE",
                 "header": [],
                 "url": {
-                  "raw": "{{baseUrl}}/users/:id",
+                  "raw": "{{baseUrl}}{{version}}/users/:id",
                   "host": [
-                    "{{baseUrl}}"
+                    "{{baseUrl}}{{version}}"
                   ],
                   "path": [
                     "users",
@@ -787,7 +829,13 @@
               "name": "401 Unauthorized",
               "originalRequest": {
                 "method": "DELETE",
-                "header": [],
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "ffffdds",
+                    "type": "text"
+                  }
+                ],
                 "url": {
                   "raw": "{{baseUrl}}{{version}}/users/::uderId",
                   "host": [
@@ -800,14 +848,14 @@
                   "variable": [
                     {
                       "key": ":uderId",
-                      "value": "d74e0b7e-d90b-4fb8-8e09-01b5d73f457e"
+                      "value": "69097a3a-2be3-4257-8e65-4e1a3080aa4b"
                     }
                   ]
                 }
               },
               "status": "Unauthorized",
               "code": 401,
-              "_postman_previewlanguage": null,
+              "_postman_previewlanguage": "Text",
               "header": [
                 {
                   "key": "X-Content-Type-Options",
@@ -891,9 +939,9 @@
                 "method": "GET",
                 "header": [],
                 "url": {
-                  "raw": "{{baseUrl}}/users",
+                  "raw": "{{baseUrl}}{{version}}/users",
                   "host": [
-                    "{{baseUrl}}"
+                    "{{baseUrl}}{{version}}"
                   ],
                   "path": [
                     "users"
@@ -916,7 +964,13 @@
               "name": "401 Unauthorized",
               "originalRequest": {
                 "method": "GET",
-                "header": [],
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "ttresddf",
+                    "type": "text"
+                  }
+                ],
                 "url": {
                   "raw": "{{baseUrl}}{{version}}/users",
                   "host": [
@@ -929,7 +983,7 @@
               },
               "status": "Unauthorized",
               "code": 401,
-              "_postman_previewlanguage": null,
+              "_postman_previewlanguage": "Text",
               "header": [
                 {
                   "key": "X-Content-Type-Options",
@@ -982,7 +1036,125 @@
           ]
         },
         {
+          "name": "Get Users by Name",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}{{version}}/users?name=Fernando",
+              "host": [
+                "{{baseUrl}}{{version}}"
+              ],
+              "path": [
+                "users"
+              ],
+              "query": [
+                {
+                  "key": "name",
+                  "value": "Fernando"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "200 OK - Users Found",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}{{version}}/users?name=Fernando",
+                  "host": [
+                    "{{baseUrl}}{{version}}"
+                  ],
+                  "path": [
+                    "users"
+                  ],
+                  "query": [
+                    {
+                      "key": "name",
+                      "value": "Fernando"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "",
+              "header": [
+                {
+                  "key": "X-Content-Type-Options",
+                  "value": "nosniff"
+                },
+                {
+                  "key": "X-XSS-Protection",
+                  "value": "0"
+                },
+                {
+                  "key": "Cache-Control",
+                  "value": "no-cache, no-store, max-age=0, must-revalidate"
+                },
+                {
+                  "key": "Pragma",
+                  "value": "no-cache"
+                },
+                {
+                  "key": "Expires",
+                  "value": "0"
+                },
+                {
+                  "key": "X-Frame-Options",
+                  "value": "DENY"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Transfer-Encoding",
+                  "value": "chunked"
+                },
+                {
+                  "key": "Date",
+                  "value": "Tue, 05 May 2026 03:07:50 GMT"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=60"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                }
+              ],
+              "cookie": [
+                {
+                  "expires": "Invalid Date",
+                  "domain": "",
+                  "path": ""
+                }
+              ],
+              "body": "{\n    \"content\": [\n        {\n            \"id\": \"9cebbd56-3069-435c-80b9-8e3f1069ea25\",\n            \"name\": \"Fernando Langworth\",\n            \"email\": \"kailyn_streich58@gmail.com\",\n            \"login\": \"Moriah.Botsford\",\n            \"role\": \"Owner\",\n            \"addresses\": [\n                {\n                    \"id\": \"63b1e9c9-ce96-4071-adab-680eac52ad13\",\n                    \"street\": \"Hunter Union\",\n                    \"number\": \"v\",\n                    \"complement\": null,\n                    \"neighborhood\": \"et\",\n                    \"city\": \"Stockton\",\n                    \"state\": \"RJ\",\n                    \"zipCode\": \"00000-000\",\n                    \"country\": \"Slovenia\"\n                }\n            ]\n        },\n        {\n            \"id\": \"cf1bb722-b0ec-4f46-9179-9f8c4e74b604\",\n            \"name\": \"Fernando Segundo\",\n            \"email\": \"pierce72@yahoo.com\",\n            \"login\": \"Josiane96\",\n            \"role\": \"Client\",\n            \"addresses\": [\n                {\n                    \"id\": \"3b2c55d7-9a4d-4d27-b2ca-eb40061b4529\",\n                    \"street\": \"Hahn Walks\",\n                    \"number\": \"b\",\n                    \"complement\": null,\n                    \"neighborhood\": \"fugiat\",\n                    \"city\": \"Burlington\",\n                    \"state\": \"RJ\",\n                    \"zipCode\": \"00000-000\",\n                    \"country\": \"Georgia\"\n                },\n                {\n                    \"id\": \"929175f6-a1b1-4d4c-a763-ce8fb5e30661\",\n                    \"street\": \"Hettinger Stravenue\",\n                    \"number\": \"o\",\n                    \"complement\": null,\n                    \"neighborhood\": \"molestias\",\n                    \"city\": \"Port Laverna\",\n                    \"state\": \"RJ\",\n                    \"zipCode\": \"00000-000\",\n                    \"country\": \"Philippines\"\n                }\n            ]\n        }\n    ],\n    \"page\": 1,\n    \"size\": 10,\n    \"totalElements\": 2,\n    \"totalPages\": 1\n}"
+            }
+          ]
+        },
+        {
           "name": "Update User",
+          "protocolProfileBehavior": {
+            "disabledSystemHeaders": {
+              "content-type": true
+            }
+          },
           "request": {
             "auth": {
               "type": "bearer",
@@ -1003,7 +1175,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"name\": \"Updated Name\"\n}"
+              "raw": "{\n    \"name\": \"Updated Name\",\n    \"email\": \"emailatualizado@teste.com\"\n}"
             },
             "url": {
               "raw": "{{baseUrl}}{{version}}/users/:userId",
@@ -1017,7 +1189,7 @@
               "variable": [
                 {
                   "key": "userId",
-                  "value": "26818f8e-1622-41ae-a165-0e382a891a25"
+                  "value": "cf1bb722-b0ec-4f46-9179-9f8c4e74b604"
                 }
               ]
             }
@@ -1030,7 +1202,8 @@
                 "header": [
                   {
                     "key": "Content-Type",
-                    "value": "application/json"
+                    "value": "application/json",
+                    "type": "text"
                   }
                 ],
                 "body": {
@@ -1038,9 +1211,9 @@
                   "raw": "{\n    \"name\": \"Updated Name\",\n    \"login\": \"Juliana_Thompson722\",\n    \"email\": \"updated2@email.com\",\n    \"role\": 1\n}"
                 },
                 "url": {
-                  "raw": "{{baseUrl}}/users/:userId",
+                  "raw": "{{baseUrl}}{{version}}/users/:userId",
                   "host": [
-                    "{{baseUrl}}"
+                    "{{baseUrl}}{{version}}"
                   ],
                   "path": [
                     "users",
@@ -1097,9 +1270,9 @@
                   "raw": "{\n    \"name\": \"Updated Name\",\n    \"login\": \"Juliana_Thompson722\",\n    \"email\": \"updated2@email.com\",\n    \"role\": 1\n}"
                 },
                 "url": {
-                  "raw": "{{baseUrl}}/users/:userId",
+                  "raw": "{{baseUrl}}{{version}}/users/:userId",
                   "host": [
-                    "{{baseUrl}}"
+                    "{{baseUrl}}{{version}}"
                   ],
                   "path": [
                     "users",
@@ -1156,9 +1329,9 @@
                   "raw": "{\n    \"name\": \"Updated Name\",\n    \"login\": \"Juliana_Thompson722\",\n    \"email\": \"Sonia52@gmail.com\",\n    \"role\": 1\n}"
                 },
                 "url": {
-                  "raw": "{{baseUrl}}/users/:userId",
+                  "raw": "{{baseUrl}}{{version}}/users/:userId",
                   "host": [
-                    "{{baseUrl}}"
+                    "{{baseUrl}}{{version}}"
                   ],
                   "path": [
                     "users",
@@ -1233,7 +1406,7 @@
               },
               "status": "Unauthorized",
               "code": 401,
-              "_postman_previewlanguage": null,
+              "_postman_previewlanguage": "Text",
               "header": [
                 {
                   "key": "X-Content-Type-Options",
@@ -1316,7 +1489,7 @@
               },
               "status": "Forbidden",
               "code": 403,
-              "_postman_previewlanguage": null,
+              "_postman_previewlanguage": "Text",
               "header": [
                 {
                   "key": "X-Content-Type-Options",
@@ -1390,7 +1563,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"oldPassword\": \"Senh@1234@\",\n    \"newPassword\": \"JhtaNjnxy56@\"\n}",
+              "raw": "{\n    \"oldPassword\": \"Senh@12345\",\n    \"newPassword\": \"JhtaNjnxy56@\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -1410,7 +1583,7 @@
               "variable": [
                 {
                   "key": "userId",
-                  "value": "4f7dbc63-0a15-4f49-abe7-faacb150d51a"
+                  "value": "98052eed-5945-4b0c-ba3b-11c3d57f85d8"
                 }
               ]
             }
@@ -1436,9 +1609,9 @@
                   }
                 },
                 "url": {
-                  "raw": "{{baseUrl}}/users/:userId/password",
+                  "raw": "{{baseUrl}}{{version}}/users/:userId/password",
                   "host": [
-                    "{{baseUrl}}"
+                    "{{baseUrl}}{{version}}"
                   ],
                   "path": [
                     "users",
@@ -1497,9 +1670,9 @@
                   }
                 },
                 "url": {
-                  "raw": "{{baseUrl}}/users/:userId/password",
+                  "raw": "{{baseUrl}}{{version}}/users/:userId/password",
                   "host": [
-                    "{{baseUrl}}"
+                    "{{baseUrl}}{{version}}"
                   ],
                   "path": [
                     "users",
@@ -1562,9 +1735,9 @@
                   }
                 },
                 "url": {
-                  "raw": "{{baseUrl}}/users/:userId/password",
+                  "raw": "{{baseUrl}}{{version}}/users/:userId/password",
                   "host": [
-                    "{{baseUrl}}"
+                    "{{baseUrl}}{{version}}"
                   ],
                   "path": [
                     "users",
@@ -1623,9 +1796,9 @@
                   }
                 },
                 "url": {
-                  "raw": "{{baseUrl}}/users/:userId/password",
+                  "raw": "{{baseUrl}}{{version}}/users/:userId/password",
                   "host": [
-                    "{{baseUrl}}"
+                    "{{baseUrl}}{{version}}"
                   ],
                   "path": [
                     "users",
@@ -1699,7 +1872,7 @@
               },
               "status": "Unauthorized",
               "code": 401,
-              "_postman_previewlanguage": null,
+              "_postman_previewlanguage": "Text",
               "header": [
                 {
                   "key": "X-Content-Type-Options",
@@ -1788,7 +1961,7 @@
               },
               "status": "Forbidden",
               "code": 403,
-              "_postman_previewlanguage": null,
+              "_postman_previewlanguage": "Text",
               "header": [
                 {
                   "key": "X-Content-Type-Options",
@@ -1841,7 +2014,7 @@
           ]
         },
         {
-          "name": "Get me",
+          "name": "Get Me",
           "request": {
             "auth": {
               "type": "bearer",
@@ -1885,7 +2058,7 @@
               },
               "status": "OK",
               "code": 200,
-              "_postman_previewlanguage": null,
+              "_postman_previewlanguage": "Text",
               "header": [
                 {
                   "key": "X-Content-Type-Options",
@@ -1943,7 +2116,7 @@
       "name": "Auth",
       "item": [
         {
-          "name": "login",
+          "name": "Login",
           "event": [
             {
               "listen": "test",
@@ -1971,7 +2144,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"login\": \"Joany.Lowe\",\n    \"password\": \"JhtaNjnxy55@\"\n}",
+              "raw": "{\n    \"login\": \"owner\",\n    \"password\": \"Senh@1234\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -2005,9 +2178,9 @@
                   }
                 },
                 "url": {
-                  "raw": "{{baseUrl}}/auth/login",
+                  "raw": "{{baseUrl}}{{version}}/auth/login",
                   "host": [
-                    "{{baseUrl}}"
+                    "{{baseUrl}}{{version}}"
                   ],
                   "path": [
                     "auth",
@@ -2058,9 +2231,9 @@
                   }
                 },
                 "url": {
-                  "raw": "{{baseUrl}}/auth/login",
+                  "raw": "{{baseUrl}}{{version}}/auth/login",
                   "host": [
-                    "{{baseUrl}}"
+                    "{{baseUrl}}{{version}}"
                   ],
                   "path": [
                     "auth",
@@ -2119,7 +2292,7 @@
               },
               "status": "OK",
               "code": 200,
-              "_postman_previewlanguage": null,
+              "_postman_previewlanguage": "Text",
               "header": [
                 {
                   "key": "Content-Type",
@@ -2148,7 +2321,7 @@
           ]
         },
         {
-          "name": "register",
+          "name": "Register",
           "event": [
             {
               "listen": "test",
@@ -2202,7 +2375,7 @@
                 "header": [],
                 "body": {
                   "mode": "raw",
-                  "raw": "{\n    \"login\": \"Sandrine .Hegmann\",\n    \"password\": \"jhtc5zaNjnxy@\"\n}",
+                  "raw": "{\n    \"name\": \"Admin User1\",\n    \"email\": \"admin@tested.com\",\n    \"password\": \"JhtaNjnxy55@d\",\n    \"role\": 1,\n    \"login\": \"admin1\"\n}",
                   "options": {
                     "raw": {
                       "language": "json"
@@ -2210,13 +2383,13 @@
                   }
                 },
                 "url": {
-                  "raw": "{{baseUrl}}/auth/login",
+                  "raw": "{{baseUrl}}{{version}}/auth/register",
                   "host": [
-                    "{{baseUrl}}"
+                    "{{baseUrl}}{{version}}"
                   ],
                   "path": [
                     "auth",
-                    "login"
+                    "register"
                   ]
                 }
               },
@@ -2255,7 +2428,7 @@
                 "header": [],
                 "body": {
                   "mode": "raw",
-                  "raw": "{\n    \"login\": \"Sandrine.Hegmann\",\n    \"password\": \"jhtc5zNjnxy@\"\n}",
+                  "raw": "{\n    \"name\": \"Admin User1\",\n    \"email\": \"admin@tested.com\",\n    \"password\": \"JhtaN\",\n    \"role\": 1,\n    \"login\": \"admin1\"\n}",
                   "options": {
                     "raw": {
                       "language": "json"
@@ -2263,13 +2436,13 @@
                   }
                 },
                 "url": {
-                  "raw": "{{baseUrl}}/auth/login",
+                  "raw": "{{baseUrl}}{{version}}/auth/register",
                   "host": [
-                    "{{baseUrl}}"
+                    "{{baseUrl}}{{version}}"
                   ],
                   "path": [
                     "auth",
-                    "login"
+                    "register"
                   ]
                 }
               },
@@ -2316,9 +2489,9 @@
                   }
                 },
                 "url": {
-                  "raw": "{{baseUrl}}/auth/login",
+                  "raw": "{{baseUrl}}{{version}}/auth/login",
                   "host": [
-                    "{{baseUrl}}"
+                    "{{baseUrl}}{{version}}"
                   ],
                   "path": [
                     "auth",
