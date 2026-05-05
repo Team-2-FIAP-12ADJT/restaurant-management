@@ -220,7 +220,7 @@ class UsersMapperTest {
     }
     @Test
     void shouldReturnNullWhenAddressIsNull() {
-        AddressResponseDTO response = mapper.toAddressResponseDTO(null);
+        Address response = mapper.addressDtoToEntity((AddressRequestDTO) null);
 
         assertNull(response);
     }

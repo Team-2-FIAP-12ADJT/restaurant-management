@@ -218,17 +218,16 @@ class UsersControllerTest {
     }
 
     private AddressResponseDTO buildAddressResponseDTO() {
-        return new AddressResponseDTO(
-                UUID.randomUUID(),
-                "Street",
-                "123",
-                "Neighborhood",
-                "City",
-                "SP",
-                "00000-000",
-                "Country",
-                ""
-        );
+        return AddressResponseDTO.builder()
+                .id(UUID.randomUUID())
+                .street("Street")
+                .number("123")
+                .neighborhood("Neighborhood")
+                .city("City")
+                .state("SP")
+                .zipCode("00000-000")
+                .country("Brazil")
+                .build();
     }
 
     private UsersUpdateRequestDTO buildInvClientUpdateReques(){
