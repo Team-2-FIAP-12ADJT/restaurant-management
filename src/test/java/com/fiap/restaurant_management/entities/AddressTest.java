@@ -20,10 +20,10 @@ class AddressTest {
     }
 
     @Test
-    void shouldSetDeletedAtWhenSetDeletedIsCalled() {
+    void shouldSetDeletedAtWhenSoftDeleteIsCalled() {
         Address address = new Address();
 
-        address.setDeleted();
+        address.softDelete();
 
         assertNotNull(address.getDeletedAt());
     }

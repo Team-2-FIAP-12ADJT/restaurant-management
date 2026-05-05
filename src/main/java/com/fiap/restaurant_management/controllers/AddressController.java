@@ -8,6 +8,7 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.RestController;
 import com.fiap.restaurant_management.dtos.AddressRequestDTO;
 import com.fiap.restaurant_management.dtos.AddressResponseDTO;
+import com.fiap.restaurant_management.dtos.AddressUpdateRequestDTO;
 import com.fiap.restaurant_management.services.interfaces.AddressServiceContract;
 
 import org.springframework.web.bind.annotation.RequestBody;
@@ -39,14 +40,31 @@ public class AddressController implements AddressControllerContract {
     }
 
     @Override
-    @PreAuthorize("hasRole('OWNER') or @userSecurity.isSelf(#userId, authentication)")
+    @PreAuthorize("hasRole('OWNER')")
     public ResponseEntity<List<AddressResponseDTO>> findByUserId(@PathVariable UUID userId) {
         return ResponseEntity.ok(this.addressService.findByUserId(userId));
     }
 
     @Override
+    @PreAuthorize("hasAnyRole('OWNER', 'CLIENT')")
     public ResponseEntity<List<AddressResponseDTO>> me(@AuthenticationPrincipal Jwt jwt) {
         UUID userId = UUID.fromString(jwt.getSubject());
         return ResponseEntity.ok(this.addressService.findByUserId(userId));
+    }
+
+    @Override
+    @PreAuthorize("hasRole('OWNER') or @userSecurity.isSelf(#userId, authentication)")
+    public ResponseEntity<AddressResponseDTO> update(
+            @PathVariable UUID userId,
+            @PathVariable UUID addressId,
+            @Valid @RequestBody AddressUpdateRequestDTO dto) {
+        return ResponseEntity.ok(this.addressService.update(userId, addressId, dto));
+    }
+
+    @Override
+    @PreAuthorize("hasRole('OWNER')")
+    public ResponseEntity<Void> delete(@PathVariable UUID addressId) {
+        this.addressService.delete(addressId);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }
