@@ -2,6 +2,7 @@ package com.fiap.restaurant_management.services;
 
 import com.fiap.restaurant_management.dtos.AddressRequestDTO;
 import com.fiap.restaurant_management.dtos.AddressResponseDTO;
+import com.fiap.restaurant_management.dtos.AddressUpdateRequestDTO;
 import com.fiap.restaurant_management.entities.Address;
 import com.fiap.restaurant_management.entities.Users;
 import com.fiap.restaurant_management.mappers.AddressMapper;
@@ -71,7 +72,6 @@ class AddressServiceTest {
                 .zipCode(savedAddress.getZipCode())
                 .country(savedAddress.getCountry())
                 .complement(savedAddress.getComplement())
-                .user(existingUser)
                 .build();
 
         when(usersRepository.findById(userId)).thenReturn(Optional.of(existingUser));
@@ -126,6 +126,191 @@ class AddressServiceTest {
         verify(addressMapper, never()).toAddressResponseDTO(any(Address.class));
     }
 
+    @Test
+    void shouldUpdateAddressSuccessfully() {
+        UUID userId = UUID.randomUUID();
+        UUID addressId = UUID.randomUUID();
+        AddressUpdateRequestDTO request = new AddressUpdateRequestDTO(
+                "Rua Nova",
+                "456",
+                "Apto 2",
+                "Jardins",
+                "Campinas",
+                "SP",
+                "13000-000",
+                "Brazil");
+
+        Address existingAddress = buildAddress(addressId, "Rua das Flores", "123", "Centro");
+        Address savedAddress = buildAddress(addressId, request.street(), request.number(), request.neighborhood());
+        savedAddress.setComplement(request.complement());
+        savedAddress.setCity(request.city());
+        savedAddress.setState(request.state());
+        savedAddress.setZipCode(request.zipCode());
+        savedAddress.setCountry(request.country());
+
+        AddressResponseDTO expected = AddressResponseDTO.builder()
+                .id(addressId)
+                .street(request.street())
+                .number(request.number())
+                .complement(request.complement())
+                .neighborhood(request.neighborhood())
+                .city(request.city())
+                .state(request.state())
+                .zipCode(request.zipCode())
+                .country(request.country())
+                .build();
+
+        when(addressRepository.findByIdAndUserIdAndDeletedAtIsNull(addressId, userId))
+                .thenReturn(Optional.of(existingAddress));
+        when(addressRepository.findByStreetAndNumberAndNeighborhoodAndDeletedAtIsNull(
+                request.street(), request.number(), request.neighborhood())).thenReturn(null);
+        when(addressRepository.save(existingAddress)).thenReturn(savedAddress);
+        when(addressMapper.toAddressResponseDTO(savedAddress)).thenReturn(expected);
+
+        AddressResponseDTO result = addressService.update(userId, addressId, request);
+
+        assertEquals(expected, result);
+        verify(addressMapper).updateEntity(request, existingAddress);
+        verify(addressRepository).save(existingAddress);
+    }
+
+    @Test
+    void shouldThrowNotFoundWhenAddressNotBelongsToUser() {
+        UUID userId = UUID.randomUUID();
+        UUID addressId = UUID.randomUUID();
+        AddressUpdateRequestDTO request = new AddressUpdateRequestDTO(
+                "Rua Nova",
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null);
+
+        when(addressRepository.findByIdAndUserIdAndDeletedAtIsNull(addressId, userId)).thenReturn(Optional.empty());
+
+        ResponseStatusException exception = assertThrows(
+                ResponseStatusException.class,
+                () -> addressService.update(userId, addressId, request));
+
+        assertEquals(HttpStatus.NOT_FOUND, exception.getStatusCode());
+        verify(addressMapper, never()).updateEntity(any(AddressUpdateRequestDTO.class), any(Address.class));
+        verify(addressRepository, never()).save(any(Address.class));
+    }
+
+    @Test
+    void shouldThrowConflictWhenUpdatedFieldsDuplicate() {
+        UUID userId = UUID.randomUUID();
+        UUID addressId = UUID.randomUUID();
+        AddressUpdateRequestDTO request = new AddressUpdateRequestDTO(
+                "Rua Nova",
+                "456",
+                null,
+                "Jardins",
+                null,
+                null,
+                null,
+                null);
+
+        Address existingAddress = buildAddress(addressId, "Rua das Flores", "123", "Centro");
+        Address duplicateAddress = buildAddress(UUID.randomUUID(), request.street(), request.number(), request.neighborhood());
+
+        when(addressRepository.findByIdAndUserIdAndDeletedAtIsNull(addressId, userId))
+                .thenReturn(Optional.of(existingAddress));
+        when(addressRepository.findByStreetAndNumberAndNeighborhoodAndDeletedAtIsNull(
+                request.street(), request.number(), request.neighborhood())).thenReturn(duplicateAddress);
+
+        ResponseStatusException exception = assertThrows(
+                ResponseStatusException.class,
+                () -> addressService.update(userId, addressId, request));
+
+        assertEquals(HttpStatus.CONFLICT, exception.getStatusCode());
+        verify(addressMapper, never()).updateEntity(any(AddressUpdateRequestDTO.class), any(Address.class));
+        verify(addressRepository, never()).save(any(Address.class));
+    }
+
+    @Test
+    void shouldNotThrowConflictWhenDuplicateIsSameAddress() {
+        UUID userId = UUID.randomUUID();
+        UUID addressId = UUID.randomUUID();
+        AddressUpdateRequestDTO request = new AddressUpdateRequestDTO(
+                "Rua das Flores",
+                "123",
+                null,
+                "Centro",
+                null,
+                null,
+                null,
+                null);
+
+        Address existingAddress = buildAddress(addressId, "Rua das Flores", "123", "Centro");
+        AddressResponseDTO expected = AddressResponseDTO.builder()
+                .id(addressId)
+                .street(existingAddress.getStreet())
+                .number(existingAddress.getNumber())
+                .neighborhood(existingAddress.getNeighborhood())
+                .city(existingAddress.getCity())
+                .state(existingAddress.getState())
+                .zipCode(existingAddress.getZipCode())
+                .country(existingAddress.getCountry())
+                .build();
+
+        when(addressRepository.findByIdAndUserIdAndDeletedAtIsNull(addressId, userId))
+                .thenReturn(Optional.of(existingAddress));
+        when(addressRepository.findByStreetAndNumberAndNeighborhoodAndDeletedAtIsNull(
+                request.street(), request.number(), request.neighborhood())).thenReturn(existingAddress);
+        when(addressRepository.save(existingAddress)).thenReturn(existingAddress);
+        when(addressMapper.toAddressResponseDTO(existingAddress)).thenReturn(expected);
+
+        AddressResponseDTO result = addressService.update(userId, addressId, request);
+
+        assertEquals(expected, result);
+        verify(addressMapper).updateEntity(request, existingAddress);
+        verify(addressRepository).save(existingAddress);
+    }
+
+    @Test
+    void shouldNotCheckDuplicateWhenNoLocationFieldsProvided() {
+        UUID userId = UUID.randomUUID();
+        UUID addressId = UUID.randomUUID();
+        AddressUpdateRequestDTO request = new AddressUpdateRequestDTO(
+                null,
+                null,
+                "Casa",
+                null,
+                null,
+                null,
+                null,
+                null);
+
+        Address existingAddress = buildAddress(addressId, "Rua das Flores", "123", "Centro");
+        AddressResponseDTO expected = AddressResponseDTO.builder()
+                .id(addressId)
+                .street(existingAddress.getStreet())
+                .number(existingAddress.getNumber())
+                .complement("Casa")
+                .neighborhood(existingAddress.getNeighborhood())
+                .city(existingAddress.getCity())
+                .state(existingAddress.getState())
+                .zipCode(existingAddress.getZipCode())
+                .country(existingAddress.getCountry())
+                .build();
+
+        when(addressRepository.findByIdAndUserIdAndDeletedAtIsNull(addressId, userId))
+                .thenReturn(Optional.of(existingAddress));
+        when(addressRepository.save(existingAddress)).thenReturn(existingAddress);
+        when(addressMapper.toAddressResponseDTO(existingAddress)).thenReturn(expected);
+
+        AddressResponseDTO result = addressService.update(userId, addressId, request);
+
+        assertEquals(expected, result);
+        verify(addressRepository, never()).findByStreetAndNumberAndNeighborhoodAndDeletedAtIsNull(
+                any(String.class), any(String.class), any(String.class));
+        verify(addressMapper).updateEntity(request, existingAddress);
+        verify(addressRepository).save(existingAddress);
+    }
+
     private AddressRequestDTO buildValidRequest() {
         return new AddressRequestDTO(
                 "Rua das Flores",
@@ -137,5 +322,18 @@ class AddressServiceTest {
                 "Brazil",
                 "Apto 4B"
         );
+    }
+
+    private Address buildAddress(UUID addressId, String street, String number, String neighborhood) {
+        Address address = new Address();
+        address.setId(addressId);
+        address.setStreet(street);
+        address.setNumber(number);
+        address.setNeighborhood(neighborhood);
+        address.setCity("Sao Paulo");
+        address.setState("SP");
+        address.setZipCode("01310-100");
+        address.setCountry("Brazil");
+        return address;
     }
 }
