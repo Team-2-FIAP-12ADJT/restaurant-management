@@ -16,6 +16,7 @@ import com.fiap.restaurant_management.mappers.AddressMapper;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.UUID;
+import java.util.List;
 
 @Service
 @Slf4j
@@ -53,6 +54,20 @@ public class AddressService implements AddressServiceContract {
         Address savedAddress = this.addressRepository.save(addressEntity);
         log.info("Address created with id: {} for user with id: {}", savedAddress.getId(), userId);
         return this.addressMapper.toAddressResponseDTO(savedAddress);
+    }
+
+    public List<AddressResponseDTO> findByUserId(UUID userId) {
+        Users existingUser = this.usersRepository.findById(userId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        "User not found with id: " + userId));
+
+        List<Address> addresses = this.addressRepository.findByUserIdAndDeletedAtIsNull(existingUser.getId());
+
+        log.info("Found {} addresses for user with id: {}", addresses.size(), userId);
+
+        return addresses.stream()
+                .map(this.addressMapper::toAddressResponseDTO)
+                .toList();
     }
 
 }
