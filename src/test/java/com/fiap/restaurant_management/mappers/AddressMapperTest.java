@@ -47,12 +47,6 @@ class AddressMapperTest {
 
     @Test
     void shouldMapEntityToResponseDTO() {
-        Users user = new Users();
-        user.setId(UUID.randomUUID());
-        user.setName("Ricardo");
-        user.setLogin("ricardo");
-        user.setEmail("ricardo@email.com");
-
         Address address = new Address();
         address.setId(UUID.randomUUID());
         address.setStreet("Rua das Flores");
@@ -63,7 +57,6 @@ class AddressMapperTest {
         address.setZipCode("01310-100");
         address.setCountry("Brazil");
         address.setComplement("Apto 4B");
-        address.setUser(user);
 
         AddressResponseDTO response = mapper.toAddressResponseDTO(address);
 
@@ -77,9 +70,6 @@ class AddressMapperTest {
         assertEquals(address.getZipCode(), response.zipCode());
         assertEquals(address.getCountry(), response.country());
         assertEquals(address.getComplement(), response.complement());
-        assertNotNull(response.user());
-        assertEquals(user.getId(), response.user().getId());
-        assertEquals(user.getLogin(), response.user().getLogin());
     }
 
     @Test
@@ -92,7 +82,6 @@ class AddressMapperTest {
 
         assertNotNull(response);
         assertEquals("Rua sem usuario", response.street());
-        assertNull(response.user());
     }
 
     private AddressRequestDTO buildValidRequest() {
