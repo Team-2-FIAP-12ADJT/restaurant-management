@@ -1,5 +1,6 @@
 package com.fiap.restaurant_management.dtos;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
@@ -12,12 +13,11 @@ import java.util.List;
 import com.fiap.restaurant_management.enums.RoleEnum;
 
 public record UsersRequestDTO(
-                @NotBlank(message = "Password is required") @Size(min = 8, max = 16, message = "Password must be between 8 and 16 characters") @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]+$", message = "Password must contain upper, lower, number and special character") String password,
-                @NotBlank(message = "Name is required") String name,
-                @NotBlank(message = "Login is required") String login,
-                @NotBlank(message = "Email is required") @Email(message = "Email should be valid") String email,
-                @NotNull(message = "Role is required") RoleEnum role,
-
+                @Schema(example = "Strong@123") @NotBlank(message = "Password is required") @Size(min = 8, max = 16, message = "Password must be between 8 and 16 characters") @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]+$", message = "Password must contain upper, lower, number and special character") String password,
+                @Schema(example = "João Silva") @NotBlank(message = "Name is required") String name,
+                @Schema(example = "joao123") @NotBlank(message = "Login is required") String login,
+                @Schema(example = "joao@example.com") @NotBlank(message = "Email is required") @Email(message = "Email should be valid") String email,
+                @Schema(example = "1") @NotNull(message = "Role is required") RoleEnum role,
                 @Valid @NotNull(message = "Address details are required") List<AddressRequestDTO> address) {
 
         public UsersRequestDTO {

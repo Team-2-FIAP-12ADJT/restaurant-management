@@ -90,9 +90,12 @@ public class Users {
         return !this.login.equalsIgnoreCase(login);
     }
 
-    public boolean matchesPassword(String oldPassword){return this.password.equals(oldPassword);}
+    public boolean matchesPassword(String oldPassword) {
+        return this.password.equals(oldPassword);
+    }
 
-    public boolean passwordEquals(String newPassword){return this.password.equals(newPassword);}
-
+    public boolean passwordEquals(String newPassword) {
+        return this.password.equals(newPassword);
+    }
 
 }
