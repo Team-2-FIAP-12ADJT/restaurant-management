@@ -9,7 +9,6 @@ import jakarta.persistence.Column;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Convert;
-import jakarta.persistence.UniqueConstraint;
 import com.fiap.restaurant_management.enums.RoleEnumConverter;
 
 import java.time.LocalDateTime;
@@ -23,10 +22,7 @@ import lombok.*;
 import com.fiap.restaurant_management.enums.RoleEnum;
 
 @Entity
-@Table(name = "users", uniqueConstraints = {
-        @UniqueConstraint(name = "uk_users_login", columnNames = "login"),
-        @UniqueConstraint(name = "uk_users_email", columnNames = "email")
-})
+@Table(name = "users")
 @Getter
 @Setter
 @AllArgsConstructor
@@ -40,10 +36,10 @@ public class Users {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "login", nullable = false, unique = true)
+    @Column(name = "login", nullable = false)
     private String login;
 
-    @Column(name = "email", nullable = false, unique = true)
+    @Column(name = "email", nullable = false)
     private String email;
 
     @Column(name = "password", nullable = false)

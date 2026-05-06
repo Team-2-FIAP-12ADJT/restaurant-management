@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="20260505-001-users-active-unique-indexes" author="codex">
+        <dropIndex indexName="uk_users_login" tableName="users"/>
+        <dropIndex indexName="uk_users_email" tableName="users"/>
+
+        <sql>
+            CREATE UNIQUE INDEX uk_users_login_active
+            ON users (login)
+            WHERE deleted_at IS NULL;
+        </sql>
+
+        <sql>
+            CREATE UNIQUE INDEX uk_users_email_active
+            ON users (email)
+            WHERE deleted_at IS NULL;
+        </sql>
+    </changeSet>
+
+</databaseChangeLog>
