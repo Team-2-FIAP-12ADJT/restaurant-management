@@ -12,15 +12,15 @@ import java.util.UUID;
 @Repository
 public interface UsersRepository extends JpaRepository<Users, UUID> {
 
-	boolean existsByLoginIgnoreCase(String login);
+	boolean existsByLoginIgnoreCaseAndDeletedAtIsNull(String login);
 
-	boolean existsByEmailIgnoreCase(String email);
+	boolean existsByEmailIgnoreCaseAndDeletedAtIsNull(String email);
 
 	Optional<Users> findByIdAndDeletedAtIsNull(UUID id);
 
 	Page<Users> findByNameContainingIgnoreCaseAndDeletedAtIsNull(String name, Pageable pageable);
 
-    Page<Users> findByDeletedAtIsNull(Pageable pageable);
+	Page<Users> findByDeletedAtIsNull(Pageable pageable);
 
 	Optional<Users> findByLoginIgnoreCaseAndDeletedAtIsNull(String login);
 }

@@ -39,11 +39,11 @@ public class UsersService implements UsersServiceContract {
 
     @Transactional
     public UsersResponseDTO create(UsersRequestDTO usersRequestDTO) {
-        if (this.usersRepository.existsByLoginIgnoreCase(usersRequestDTO.login())) {
+        if (this.usersRepository.existsByLoginIgnoreCaseAndDeletedAtIsNull(usersRequestDTO.login())) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Login already exists");
         }
 
-        if (this.usersRepository.existsByEmailIgnoreCase(usersRequestDTO.email())) {
+        if (this.usersRepository.existsByEmailIgnoreCaseAndDeletedAtIsNull(usersRequestDTO.email())) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Email already exists");
         }
 
@@ -75,13 +75,13 @@ public class UsersService implements UsersServiceContract {
                 .orElseThrow(() -> new ResourceNotFoundException("User", userId));
 
         if (existingUser.isLoginChanging(updateRequestDTO.login())
-                && this.usersRepository.existsByLoginIgnoreCase(updateRequestDTO.login())) {
+                && this.usersRepository.existsByLoginIgnoreCaseAndDeletedAtIsNull(updateRequestDTO.login())) {
             log.error("Login already exists");
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Login already exists");
         }
 
         if (existingUser.isEmailChanging(updateRequestDTO.email())
-                && this.usersRepository.existsByEmailIgnoreCase(updateRequestDTO.email())) {
+                && this.usersRepository.existsByEmailIgnoreCaseAndDeletedAtIsNull(updateRequestDTO.email())) {
             log.error("Email already exists");
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Email already exists");
         }

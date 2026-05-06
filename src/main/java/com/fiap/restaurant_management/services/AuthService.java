@@ -53,11 +53,11 @@ public class AuthService implements AuthServiceContract {
 
         @Override
         public UsersResponseDTO register(RegisterRequestDTO registerRequestDTO) {
-                if (usersRepository.existsByLoginIgnoreCase(registerRequestDTO.login())) {
+                if (usersRepository.existsByLoginIgnoreCaseAndDeletedAtIsNull(registerRequestDTO.login())) {
                         throw new ResponseStatusException(HttpStatus.CONFLICT, "Login already exists");
                 }
 
-                if (usersRepository.existsByEmailIgnoreCase(registerRequestDTO.email())) {
+                if (usersRepository.existsByEmailIgnoreCaseAndDeletedAtIsNull(registerRequestDTO.email())) {
                         throw new ResponseStatusException(HttpStatus.CONFLICT, "Email already exists");
                 }
 

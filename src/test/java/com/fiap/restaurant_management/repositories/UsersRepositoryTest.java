@@ -36,29 +36,51 @@ class UsersRepositoryTest extends PostgreSQLIntegrationTestSupport {
 
 
     @Test
-    @DisplayName("Deve retornar true quando login existir ignorando case")
-    void shouldReturnTrue_whenLoginExistsIgnoringCase() {
+    @DisplayName("Deve retornar true quando login ativo existir ignorando case")
+    void shouldReturnTrue_whenActiveLoginExistsIgnoringCase() {
         createUser("Gustavo", "gustavo", "g@email.com");
 
-        boolean exists = repository.existsByLoginIgnoreCase("GUSTAVO");
+        boolean exists = repository.existsByLoginIgnoreCaseAndDeletedAtIsNull("GUSTAVO");
 
         assertTrue(exists);
     }
 
     @Test
-    void shouldReturnFalse_whenLoginDoesNotExist() {
-        boolean exists = repository.existsByLoginIgnoreCase("inexistente");
+    void shouldReturnFalse_whenActiveLoginDoesNotExist() {
+        boolean exists = repository.existsByLoginIgnoreCaseAndDeletedAtIsNull("inexistente");
 
         assertFalse(exists);
     }
 
     @Test
-    void shouldReturnTrue_whenEmailExistsIgnoringCase() {
+    void shouldReturnTrue_whenActiveEmailExistsIgnoringCase() {
         createUser("Gustavo", "gustavo", "email@test.com");
 
-        boolean exists = repository.existsByEmailIgnoreCase("EMAIL@test.com");
+        boolean exists = repository.existsByEmailIgnoreCaseAndDeletedAtIsNull("EMAIL@test.com");
 
         assertTrue(exists);
+    }
+
+    @Test
+    void shouldReturnFalse_whenOnlySoftDeletedLoginExists() {
+        Users user = createUser("Gustavo", "gustavo", "g@email.com");
+        user.softDelete();
+        repository.saveAndFlush(user);
+
+        boolean exists = repository.existsByLoginIgnoreCaseAndDeletedAtIsNull("GUSTAVO");
+
+        assertFalse(exists);
+    }
+
+    @Test
+    void shouldReturnFalse_whenOnlySoftDeletedEmailExists() {
+        Users user = createUser("Gustavo", "gustavo", "email@test.com");
+        user.softDelete();
+        repository.saveAndFlush(user);
+
+        boolean exists = repository.existsByEmailIgnoreCaseAndDeletedAtIsNull("EMAIL@test.com");
+
+        assertFalse(exists);
     }
 
 

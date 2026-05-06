@@ -118,8 +118,8 @@ class AuthServiceTest {
                 "CLIENT",
                 List.of());
 
-        when(repository.existsByLoginIgnoreCase("gustavo123")).thenReturn(false);
-        when(repository.existsByEmailIgnoreCase("gustavo@email.com")).thenReturn(false);
+        when(repository.existsByLoginIgnoreCaseAndDeletedAtIsNull("gustavo123")).thenReturn(false);
+        when(repository.existsByEmailIgnoreCaseAndDeletedAtIsNull("gustavo@email.com")).thenReturn(false);
         when(mapper.toEntity(request)).thenReturn(user);
         when(passwordEncoder.encode("Strong@123")).thenReturn("encoded-password");
         when(repository.save(user)).thenReturn(savedUser);
@@ -142,7 +142,7 @@ class AuthServiceTest {
                 "gustavo@email.com",
                 List.of());
 
-        when(repository.existsByLoginIgnoreCase("gustavo123")).thenReturn(true);
+        when(repository.existsByLoginIgnoreCaseAndDeletedAtIsNull("gustavo123")).thenReturn(true);
 
         ResponseStatusException ex = assertThrows(ResponseStatusException.class,
                 () -> service.register(request));
@@ -160,13 +160,46 @@ class AuthServiceTest {
                 "gustavo@email.com",
                 List.of());
 
-        when(repository.existsByLoginIgnoreCase("gustavo123")).thenReturn(false);
-        when(repository.existsByEmailIgnoreCase("gustavo@email.com")).thenReturn(true);
+        when(repository.existsByLoginIgnoreCaseAndDeletedAtIsNull("gustavo123")).thenReturn(false);
+        when(repository.existsByEmailIgnoreCaseAndDeletedAtIsNull("gustavo@email.com")).thenReturn(true);
 
         ResponseStatusException ex = assertThrows(ResponseStatusException.class,
                 () -> service.register(request));
 
         assertEquals(HttpStatus.CONFLICT, ex.getStatusCode());
         verify(repository, never()).save(any());
+    }
+
+    @Test
+    void shouldRegisterWhenOnlySoftDeletedUserHasSameLoginOrEmail() {
+        RegisterRequestDTO request = new RegisterRequestDTO(
+                "Strong@123",
+                "Gustavo",
+                "gustavo123",
+                "gustavo@email.com",
+                List.of());
+        Users user = new Users();
+        Users savedUser = new Users();
+        UsersResponseDTO response = new UsersResponseDTO(
+                UUID.randomUUID(),
+                "Gustavo",
+                "gustavo@email.com",
+                "gustavo123",
+                "CLIENT",
+                List.of());
+
+        when(repository.existsByLoginIgnoreCaseAndDeletedAtIsNull("gustavo123")).thenReturn(false);
+        when(repository.existsByEmailIgnoreCaseAndDeletedAtIsNull("gustavo@email.com")).thenReturn(false);
+        when(mapper.toEntity(request)).thenReturn(user);
+        when(passwordEncoder.encode("Strong@123")).thenReturn("encoded-password");
+        when(repository.save(user)).thenReturn(savedUser);
+        when(mapper.toResponseDTO(savedUser)).thenReturn(response);
+
+        UsersResponseDTO result = service.register(request);
+
+        assertEquals(response, result);
+        verify(repository).existsByLoginIgnoreCaseAndDeletedAtIsNull("gustavo123");
+        verify(repository).existsByEmailIgnoreCaseAndDeletedAtIsNull("gustavo@email.com");
+        verify(repository).save(user);
     }
 }

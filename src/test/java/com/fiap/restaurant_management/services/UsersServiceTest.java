@@ -57,8 +57,8 @@ class UsersServiceTest {
         when(dto.email()).thenReturn("email@test.com");
         when(dto.password()).thenReturn("raw-password");
 
-        when(repository.existsByLoginIgnoreCase("gustavo")).thenReturn(false);
-        when(repository.existsByEmailIgnoreCase("email@test.com")).thenReturn(false);
+        when(repository.existsByLoginIgnoreCaseAndDeletedAtIsNull("gustavo")).thenReturn(false);
+        when(repository.existsByEmailIgnoreCaseAndDeletedAtIsNull("email@test.com")).thenReturn(false);
 
         when(mapper.toEntity(dto)).thenReturn(user);
         when(passwordEncoder.encode("raw-password")).thenReturn("hashed-password");
@@ -76,7 +76,7 @@ class UsersServiceTest {
         UsersRequestDTO dto = mock(UsersRequestDTO.class);
 
         when(dto.login()).thenReturn("gustavo");
-        when(repository.existsByLoginIgnoreCase("gustavo")).thenReturn(true);
+        when(repository.existsByLoginIgnoreCaseAndDeletedAtIsNull("gustavo")).thenReturn(true);
 
         assertThrows(ResponseStatusException.class, () -> service.create(dto));
     }
@@ -88,10 +88,34 @@ class UsersServiceTest {
         when(dto.login()).thenReturn("gustavo");
         when(dto.email()).thenReturn("email@test.com");
 
-        when(repository.existsByLoginIgnoreCase("gustavo")).thenReturn(false);
-        when(repository.existsByEmailIgnoreCase("email@test.com")).thenReturn(true);
+        when(repository.existsByLoginIgnoreCaseAndDeletedAtIsNull("gustavo")).thenReturn(false);
+        when(repository.existsByEmailIgnoreCaseAndDeletedAtIsNull("email@test.com")).thenReturn(true);
 
         assertThrows(ResponseStatusException.class, () -> service.create(dto));
+    }
+
+    @Test
+    void shouldCreateUserWhenOnlySoftDeletedUserHasSameLoginOrEmail() {
+        UsersRequestDTO dto = mock(UsersRequestDTO.class);
+
+        when(dto.login()).thenReturn("gustavo");
+        when(dto.email()).thenReturn("email@test.com");
+        when(dto.password()).thenReturn("raw-password");
+
+        when(repository.existsByLoginIgnoreCaseAndDeletedAtIsNull("gustavo")).thenReturn(false);
+        when(repository.existsByEmailIgnoreCaseAndDeletedAtIsNull("email@test.com")).thenReturn(false);
+
+        when(mapper.toEntity(dto)).thenReturn(user);
+        when(passwordEncoder.encode("raw-password")).thenReturn("hashed-password");
+        when(repository.save(user)).thenReturn(user);
+        when(mapper.toResponseDTO(user)).thenReturn(mock(UsersResponseDTO.class));
+
+        UsersResponseDTO response = service.create(dto);
+
+        assertNotNull(response);
+        verify(repository).existsByLoginIgnoreCaseAndDeletedAtIsNull("gustavo");
+        verify(repository).existsByEmailIgnoreCaseAndDeletedAtIsNull("email@test.com");
+        verify(repository).save(user);
     }
 
     @Test
@@ -269,7 +293,7 @@ class UsersServiceTest {
 
         when(dto.login()).thenReturn("newLogin");
         when(existingUser.isLoginChanging("newLogin")).thenReturn(true);
-        when(repository.existsByLoginIgnoreCase("newLogin")).thenReturn(true);
+        when(repository.existsByLoginIgnoreCaseAndDeletedAtIsNull("newLogin")).thenReturn(true);
 
         ResponseStatusException ex = assertThrows(ResponseStatusException.class,
                 () -> service.update(userId, dto));
@@ -290,7 +314,7 @@ class UsersServiceTest {
 
         when(dto.email()).thenReturn("email@test.com");
         when(existingUser.isEmailChanging("email@test.com")).thenReturn(true);
-        when(repository.existsByEmailIgnoreCase("email@test.com")).thenReturn(true);
+        when(repository.existsByEmailIgnoreCaseAndDeletedAtIsNull("email@test.com")).thenReturn(true);
 
         ResponseStatusException ex = assertThrows(ResponseStatusException.class,
                 () -> service.update(userId, dto));
@@ -317,7 +341,7 @@ class UsersServiceTest {
 
         service.update(userId, dto);
 
-        verify(repository, never()).existsByLoginIgnoreCase(any());
+        verify(repository, never()).existsByLoginIgnoreCaseAndDeletedAtIsNull(any());
     }
 
     @Test
@@ -338,7 +362,7 @@ class UsersServiceTest {
 
         service.update(userId, dto);
 
-        verify(repository, never()).existsByEmailIgnoreCase(any());
+        verify(repository, never()).existsByEmailIgnoreCaseAndDeletedAtIsNull(any());
     }
 
     @Test
@@ -351,7 +375,7 @@ class UsersServiceTest {
         when(repository.findByIdAndDeletedAtIsNull(userId))
                 .thenReturn(Optional.of(user));
 
-        when(repository.existsByLoginIgnoreCase("newLogin"))
+        when(repository.existsByLoginIgnoreCaseAndDeletedAtIsNull("newLogin"))
                 .thenReturn(false);
 
         when(repository.save(any())).thenReturn(user);
@@ -359,7 +383,7 @@ class UsersServiceTest {
 
         service.update(userId, dto);
 
-        verify(repository).existsByLoginIgnoreCase("newLogin");
+        verify(repository).existsByLoginIgnoreCaseAndDeletedAtIsNull("newLogin");
     }
 
     @Test
@@ -374,14 +398,14 @@ class UsersServiceTest {
                 .thenReturn(Optional.of(user));
 
         when(user.isEmailChanging("new@email.com")).thenReturn(true);
-        when(repository.existsByEmailIgnoreCase("new@email.com")).thenReturn(false);
+        when(repository.existsByEmailIgnoreCaseAndDeletedAtIsNull("new@email.com")).thenReturn(false);
 
         when(repository.save(any())).thenReturn(user);
         when(mapper.toResponseDTO(any())).thenReturn(mock(UsersResponseDTO.class));
 
         service.update(userId, dto);
 
-        verify(repository).existsByEmailIgnoreCase("new@email.com");
+        verify(repository).existsByEmailIgnoreCaseAndDeletedAtIsNull("new@email.com");
     }
 
     @Test

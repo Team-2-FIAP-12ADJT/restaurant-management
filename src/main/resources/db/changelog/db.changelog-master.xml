@@ -8,5 +8,6 @@
 
     <include file="classpath:db/changelog/20260407-create-user-and-address-tables.xml"/>
     <include file="classpath:db/changelog/20260503-seed-owner-user.xml"/>
+    <include file="classpath:db/changelog/20260505-users-soft-delete-unique-indexes.xml"/>
 
 </databaseChangeLog>
