@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirements;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Tag(name = "Auth", description = "Gerenciamento de autenticação")
 public interface AuthControllerContract {
 
+        @SecurityRequirements
         @Operation(description = "Autentica um usuário e retorna um token JWT", summary = "Login de usuário")
         @ApiResponses(value = {
                         @ApiResponse(responseCode = "200", description = "Autenticado com sucesso", content = @Content(mediaType = "application/json", schema = @Schema(implementation = UsersLoginResponseDTO.class))),
@@ -34,6 +36,7 @@ public interface AuthControllerContract {
         ResponseEntity<UsersLoginResponseDTO> login(
                         @Valid @org.springframework.web.bind.annotation.RequestBody UsersLoginRequestDTO usersLoginRequestDTO);
 
+        @SecurityRequirements
         @Operation(description = "Registra um novo usuário CLIENT e retorna os dados do usuário criado", summary = "Registro de usuário")
         @ApiResponses(value = {
                         @ApiResponse(responseCode = "201", description = "Usuário registrado com sucesso", content = @Content(mediaType = "application/json", schema = @Schema(implementation = UsersResponseDTO.class))),
