@@ -71,7 +71,7 @@ public class Address {
         this.user = user;
     }
 
-    public void setDeleted() {
+    public void softDelete() {
         LocalDateTime now = LocalDateTime.now();
         this.deletedAt = now;
     }

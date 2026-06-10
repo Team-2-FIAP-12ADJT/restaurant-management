@@ -1,9 +1,10 @@
 package com.fiap.restaurant_management.controllers.interfaces;
 
 import com.fiap.restaurant_management.controllers.ApiPaths;
+import com.fiap.restaurant_management.dtos.RegisterRequestDTO;
+import com.fiap.restaurant_management.dtos.ResourceErrorResponseDTO;
 import com.fiap.restaurant_management.dtos.UsersLoginRequestDTO;
 import com.fiap.restaurant_management.dtos.UsersLoginResponseDTO;
-import com.fiap.restaurant_management.dtos.RegisterRequestDTO;
 import com.fiap.restaurant_management.dtos.UsersResponseDTO;
 import com.fiap.restaurant_management.dtos.ValidationErrorResponseDTO;
 import io.swagger.v3.oas.annotations.Operation;
@@ -29,7 +30,7 @@ public interface AuthControllerContract {
         @ApiResponses(value = {
                         @ApiResponse(responseCode = "200", description = "Autenticado com sucesso", content = @Content(mediaType = "application/json", schema = @Schema(implementation = UsersLoginResponseDTO.class))),
                         @ApiResponse(responseCode = "400", description = "Dados inválidos", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ValidationErrorResponseDTO.class))),
-                        @ApiResponse(responseCode = "401", description = "Login ou senha incorretos", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ValidationErrorResponseDTO.class)))
+                        @ApiResponse(responseCode = "401", description = "Login ou senha incorretos", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ResourceErrorResponseDTO.class)))
         })
         @PostMapping("/login")
         ResponseEntity<UsersLoginResponseDTO> login(
@@ -38,9 +39,9 @@ public interface AuthControllerContract {
         @SecurityRequirements
         @Operation(description = "Registra um novo usuário CLIENT e retorna os dados do usuário criado", summary = "Registro de usuário")
         @ApiResponses(value = {
-                        @ApiResponse(responseCode = "201", description = "Usuário criado com sucesso", content = @Content(mediaType = "application/json", schema = @Schema(implementation = UsersLoginResponseDTO.class))),
+                        @ApiResponse(responseCode = "201", description = "Usuário registrado com sucesso", content = @Content(mediaType = "application/json", schema = @Schema(implementation = UsersResponseDTO.class))),
                         @ApiResponse(responseCode = "400", description = "Dados inválidos", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ValidationErrorResponseDTO.class))),
-                        @ApiResponse(responseCode = "409", description = "Login ou e-mail já cadastrado", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ValidationErrorResponseDTO.class)))
+                        @ApiResponse(responseCode = "409", description = "Login ou e-mail já cadastrado", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ResourceErrorResponseDTO.class)))
         })
         @PostMapping("/register")
         ResponseEntity<UsersResponseDTO> register(

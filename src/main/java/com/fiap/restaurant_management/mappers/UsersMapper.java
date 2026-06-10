@@ -13,7 +13,6 @@ import org.mapstruct.MappingTarget;
 import org.mapstruct.Mapping;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 import com.fiap.restaurant_management.dtos.UsersResponseDTO;
-import com.fiap.restaurant_management.dtos.AddressResponseDTO;
 
 import java.util.List;
 
@@ -62,8 +61,6 @@ public interface UsersMapper {
     @Mapping(target = "addresses", source = "addresses")
     @Mapping(target = "role", source = "role.description")
     UsersResponseDTO toResponseDTO(Users user);
-
-    AddressResponseDTO toAddressResponseDTO(Address address);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     @Mapping(target = "id", ignore = true)
